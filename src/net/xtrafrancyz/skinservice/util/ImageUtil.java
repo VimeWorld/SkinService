@@ -54,7 +54,7 @@ public class ImageUtil {
         to.setRGB(toX1, toY1, w, h, rgb, 0, w);
     }
     
-    public static void copyWithAltha(BufferedImage from,
+    public static void copyWithAlpha(BufferedImage from,
                                      int fromX1,
                                      int fromY1,
                                      int fromX2,
@@ -100,12 +100,17 @@ public class ImageUtil {
         to.setRGB(toX1, toY1, w, h, temp, 0, w);
     }
     
-    private static final PngEncoder pngEncoder = new PngEncoder(PngEncoder.COLOR_TRUECOLOR_ALPHA);
+    private static final ThreadLocal<PngEncoder> pngEncoder = new ThreadLocal<PngEncoder>() {
+        @Override
+        protected PngEncoder initialValue() {
+            return new PngEncoder(PngEncoder.COLOR_TRUECOLOR_ALPHA);
+        }
+    };
     
     public static byte[] toByteArray(BufferedImage img) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         try {
-            pngEncoder.encode(img, stream);
+            pngEncoder.get().encode(img, stream);
         } catch (IOException ignored) {}
         return stream.toByteArray();
     }

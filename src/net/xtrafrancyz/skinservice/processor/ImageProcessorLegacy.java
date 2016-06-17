@@ -1,4 +1,4 @@
-package net.xtrafrancyz.skinservice.handler;
+package net.xtrafrancyz.skinservice.processor;
 
 import net.xtrafrancyz.skinservice.SkinService;
 import net.xtrafrancyz.skinservice.util.ImageUtil;
@@ -28,7 +28,7 @@ public class ImageProcessorLegacy {
         BufferedImage img = new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB);
         
         ImageUtil.copy(skin, 8, 8, 16, 16, img, 0, 0);
-        ImageUtil.copyWithAltha(skin, 40, 8, 48, 16, img, 0, 0);
+        ImageUtil.copyWithAlpha(skin, 40, 8, 48, 16, img, 0, 0);
         img = ImageUtil.scale(img, size, size);
         
         return ImageUtil.toByteArray(img);

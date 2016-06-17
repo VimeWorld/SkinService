@@ -6,7 +6,7 @@ import ro.pippo.core.Pippo;
 import ro.pippo.core.route.RouteContext;
 import ro.pippo.undertow.UndertowServer;
 
-import net.xtrafrancyz.skinservice.handler.ImageProcessorLegacy;
+import net.xtrafrancyz.skinservice.processor.ImageProcessorLegacy;
 import net.xtrafrancyz.skinservice.repository.SkinRepository;
 import net.xtrafrancyz.skinservice.util.ImageUtil;
 
