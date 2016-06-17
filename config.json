@@ -1,0 +1,10 @@
+{
+	"host": "0.0.0.0",
+	"port": 991,
+	"repository": {
+		"type": "URL",
+		"skin-path": "http://mc.vimeworld.ru/launcher/skins/",
+		"cape-path": "http://mc.vimeworld.ru/launcher/cloaks/",
+		"default-skin": "steve.png"
+	}
+}

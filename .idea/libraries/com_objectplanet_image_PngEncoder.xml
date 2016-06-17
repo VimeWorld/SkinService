@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="com.objectplanet.image.PngEncoder">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/com.objectplanet.image.PngEncoder.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
