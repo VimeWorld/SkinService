@@ -6,5 +6,11 @@
 		"skin-path": "http://mc.vimeworld.ru/launcher/skins/",
 		"cape-path": "http://mc.vimeworld.ru/launcher/cloaks/",
 		"default-skin": "steve.png"
+	}, 
+	"cloudflare": {
+		"enabled": false,
+		"zone-id": "",
+		"auth-email": "",
+		"auth-key": ""
 	}
 }

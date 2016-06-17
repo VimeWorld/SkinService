@@ -10,6 +10,7 @@ public class Config {
     public int port;
     
     public RepositoryConfig repository;
+    public CloudFlareConfig cloudflare;
     
     public class RepositoryConfig {
         public String type;
@@ -22,5 +23,18 @@ public class Config {
         
         @SerializedName("default-skin")
         public String defaultSkin;
+    }
+    
+    public class CloudFlareConfig {
+        public boolean enabled;
+        
+        @SerializedName("zone-id")
+        public String zoneId;
+        
+        @SerializedName("auth-email")
+        public String email;
+        
+        @SerializedName("auth-key")
+        public String key;
     }
 }
