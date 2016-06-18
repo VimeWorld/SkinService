@@ -42,8 +42,11 @@ public class CloudFlareUtil {
                 
                 OutputStream out = conn.getOutputStream();
                 JsonArray files = new JsonArray();
-                for (String url0 : urls)
-                    files.add(url0);
+                for (String url0 : urls) {
+                    files.add("http://" + config.cacheUrl + url0);
+                    if (config.httpsCache)
+                        files.add("https://" + config.cacheUrl + url0);
+                }
                 JsonObject json = new JsonObject();
                 json.add("files", files);
                 JsonWriter writer = new JsonWriter(new OutputStreamWriter(out));

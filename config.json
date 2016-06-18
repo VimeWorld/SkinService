@@ -1,6 +1,9 @@
 {
 	"host": "0.0.0.0",
 	"port": 991,
+	"tokens": [
+		"AuThToKeN"
+	],
 	"repository": {
 		"type": "URL",
 		"skin-path": "http://mc.vimeworld.ru/launcher/skins/",
@@ -11,6 +14,8 @@
 		"enabled": false,
 		"zone-id": "",
 		"auth-email": "",
-		"auth-key": ""
+		"auth-key": "",
+		"cache-url": "skin.example.com",
+		"clear-https-cache": true
 	}
 }

@@ -67,7 +67,7 @@ public class SkinRepository {
         return img;
     }
     
-    public void clearCloakCache(String username) {
+    public void clearCapeCache(String username) {
         capes.remove(username);
     }
     

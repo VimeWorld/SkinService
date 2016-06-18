@@ -8,6 +8,7 @@ import ro.pippo.undertow.UndertowServer;
 
 import net.xtrafrancyz.skinservice.processor.ImageProcessorLegacy;
 import net.xtrafrancyz.skinservice.repository.SkinRepository;
+import net.xtrafrancyz.skinservice.util.CloudFlareUtil;
 import net.xtrafrancyz.skinservice.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
@@ -91,6 +92,41 @@ public class SkinService {
             } else {
                 writeImage(context, ImageUtil.toByteArray(cape));
             }
+        });
+        
+        // ### /private/0 auth
+        pippo.getApplication().ALL("/private/{token}/.*", (context) -> {
+            String token = context.getParameter("token").toString();
+            if (config.tokens.contains(token)) {
+                context.next();
+            } else {
+                context.status(403);
+                context.send("Invalid token");
+            }
+        });
+        
+        // ### /private/0/cache/cape
+        pippo.getApplication().DELETE("/private/{token}/cache/cape/{username: [a-zA-z0-9_]+}", (context) -> {
+            String username = context.getParameter("username").toString();
+            skinRepository.clearCapeCache(username);
+            CloudFlareUtil.clearCache(
+                "/cape/" + username,
+                "/cape/" + username + ".png"
+            );
+            context.status(200);
+            context.send("OK");
+        });
+        
+        // ### /private/0/cache/skin
+        pippo.getApplication().DELETE("/private/{token}/cache/skin/{username: [a-zA-z0-9_]+}", (context) -> {
+            String username = context.getParameter("username").toString();
+            skinRepository.clearSkinCache(username);
+            CloudFlareUtil.clearCache(
+                "/skin/" + username,
+                "/skin/" + username + ".png"
+            );
+            context.status(200);
+            context.send("OK");
         });
         
         pippo.start();

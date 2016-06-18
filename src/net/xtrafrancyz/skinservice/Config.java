@@ -2,12 +2,15 @@ package net.xtrafrancyz.skinservice;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Set;
+
 /**
  * @author xtrafrancyz
  */
 public class Config {
     public String host;
     public int port;
+    public Set<String> tokens;
     
     public RepositoryConfig repository;
     public CloudFlareConfig cloudflare;
@@ -36,5 +39,11 @@ public class Config {
         
         @SerializedName("auth-key")
         public String key;
+    
+        @SerializedName("cache-url")
+        public String cacheUrl;
+        
+        @SerializedName("clear-https-cache")
+        public boolean httpsCache;
     }
 }
