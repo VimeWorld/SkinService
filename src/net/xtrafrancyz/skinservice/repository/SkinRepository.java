@@ -9,7 +9,6 @@ import net.xtrafrancyz.skinservice.SkinService;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
@@ -27,9 +26,11 @@ public class SkinRepository {
     
     public SkinRepository(SkinService service) {
         Config.RepositoryConfig config = service.config.repository;
+        
         access = Access.valueOf(config.type);
         skinPath = config.skinPath;
         capePath = config.capePath;
+        
         try {
             defaultSkin = ImageIO.read(new File(config.defaultSkin));
         } catch (Exception ex) {
@@ -68,7 +69,7 @@ public class SkinRepository {
         skins.invalidate(username);
     }
     
-    private BufferedImage fetch(String path) throws IOException {
+    private BufferedImage fetch(String path) {
         BufferedImage img = null;
         try {
             if (access == Access.URL)
@@ -76,7 +77,6 @@ public class SkinRepository {
             else if (access == Access.FILE)
                 img = ImageIO.read(new File(path));
         } catch (Exception ignored) {}
-        System.out.println("Fetched: " + path);
         return img;
     }
     

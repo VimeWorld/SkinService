@@ -26,10 +26,10 @@ public class Config {
         
         @SerializedName("default-skin")
         public String defaultSkin;
-    
+        
         @SerializedName("cache-size")
         public int cacheSize;
-    
+        
         @SerializedName("cache-expire-minutes")
         public int cacheExpireMinutes;
     }
@@ -45,7 +45,7 @@ public class Config {
         
         @SerializedName("auth-key")
         public String key;
-    
+        
         @SerializedName("cache-url")
         public String cacheUrl;
         

@@ -110,6 +110,8 @@ public class ImageUtil {
     public static byte[] toByteArray(BufferedImage img) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         try {
+            //TODO Fix: Скины Lucy, dimka на выходе полностью прозрачные
+            //ImageIO.write(img, "png", stream);
             pngEncoder.get().encode(img, stream);
         } catch (IOException ignored) {}
         return stream.toByteArray();
