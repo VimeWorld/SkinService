@@ -1,5 +1,5 @@
 {
-	"host": "0.0.0.0",
+	"host": "127.0.0.1",
 	"port": 991,
 	"tokens": [
 		"AuThToKeN"
@@ -8,8 +8,10 @@
 		"type": "URL",
 		"skin-path": "http://mc.vimeworld.ru/launcher/skins/",
 		"cape-path": "http://mc.vimeworld.ru/launcher/cloaks/",
-		"default-skin": "steve.png"
-	}, 
+		"default-skin": "steve.png",
+		"cache-size": 20000,
+		"cache-expire-minutes": 60
+	},
 	"cloudflare": {
 		"enabled": false,
 		"zone-id": "",

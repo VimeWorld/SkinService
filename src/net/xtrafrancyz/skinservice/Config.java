@@ -26,6 +26,12 @@ public class Config {
         
         @SerializedName("default-skin")
         public String defaultSkin;
+    
+        @SerializedName("cache-size")
+        public int cacheSize;
+    
+        @SerializedName("cache-expire-minutes")
+        public int cacheExpireMinutes;
     }
     
     public class CloudFlareConfig {

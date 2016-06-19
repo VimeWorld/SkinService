@@ -1,5 +1,8 @@
 package net.xtrafrancyz.skinservice.repository;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+
 import net.xtrafrancyz.skinservice.Config;
 import net.xtrafrancyz.skinservice.SkinService;
 
@@ -8,14 +11,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author xtrafrancyz
  */
 public class SkinRepository {
-    private HashMap<String, BufferedImage> skins;
-    private HashMap<String, BufferedImage> capes;
+    private LoadingCache<String, BufferedImage> skins;
+    private LoadingCache<String, BufferedImage> capes;
     
     private Access access;
     private String skinPath;
@@ -34,20 +37,19 @@ public class SkinRepository {
             throw new RuntimeException("Cannot load default skin");
         }
         
-        skins = new HashMap<>();
-        capes = new HashMap<>();
+        skins = Caffeine.newBuilder()
+            .maximumSize(config.cacheSize)
+            .expireAfterAccess(config.cacheExpireMinutes, TimeUnit.MINUTES)
+            .build(username -> this.fetch(skinPath + username + ".png"));
+        
+        capes = Caffeine.newBuilder()
+            .maximumSize(config.cacheSize)
+            .expireAfterAccess(config.cacheExpireMinutes, TimeUnit.MINUTES)
+            .build(username -> this.fetch(capePath + username + ".png"));
     }
     
     public BufferedImage getSkin(String username, boolean orDefault) {
-        BufferedImage img = null;
-        if (!skins.containsKey(username)) {
-            try {
-                img = fetch(skinPath + username + ".png");
-            } catch (IOException ignored) {}
-            skins.put(username, img);
-        } else {
-            img = skins.get(username);
-        }
+        BufferedImage img = skins.get(username);
         if (img == null && orDefault)
             return defaultSkin;
         else
@@ -55,32 +57,26 @@ public class SkinRepository {
     }
     
     public BufferedImage getCape(String username) {
-        BufferedImage img = null;
-        if (!capes.containsKey(username)) {
-            try {
-                img = fetch(capePath + username + ".png");
-            } catch (IOException ignored) {}
-            capes.put(username, img);
-        } else {
-            img = capes.get(username);
-        }
-        return img;
+        return capes.get(username);
     }
     
     public void clearCapeCache(String username) {
-        capes.remove(username);
+        capes.invalidate(username);
     }
     
     public void clearSkinCache(String username) {
-        skins.remove(username);
+        skins.invalidate(username);
     }
     
     private BufferedImage fetch(String path) throws IOException {
         BufferedImage img = null;
-        if (access == Access.URL)
-            img = ImageIO.read(new URL(path));
-        else if (access == Access.FILE)
-            img = ImageIO.read(new File(path));
+        try {
+            if (access == Access.URL)
+                img = ImageIO.read(new URL(path));
+            else if (access == Access.FILE)
+                img = ImageIO.read(new File(path));
+        } catch (Exception ignored) {}
+        System.out.println("Fetched: " + path);
         return img;
     }
     
