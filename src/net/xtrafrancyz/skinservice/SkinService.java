@@ -38,40 +38,40 @@ public class SkinService {
         pippo.getServer().getSettings().port(config.port);
         
         // ### /head
-        pippo.getApplication().GET("/head/{username: [a-zA-z0-9_]+}(\\.png)?", (context) -> {
+        pippo.getApplication().GET("/head/{username: [a-zA-z0-9_]+}.png", (context) -> {
             String username = context.getParameter("username").toString();
             writeImage(context, ImageProcessorLegacy.head(username, 160));
         });
-        pippo.getApplication().GET("/head/{username: [a-zA-z0-9_]+}/{size: [0-9]+}(\\.png)?", (context) -> {
+        pippo.getApplication().GET("/head/{username: [a-zA-z0-9_]+}/{size: [0-9]+}.png", (context) -> {
             int size = context.getParameter("size").toInt(160);
             String username = context.getParameter("username").toString();
             writeImage(context, ImageProcessorLegacy.head(username, size));
         });
         
         // ### /helm
-        pippo.getApplication().GET("/helm/{username: [a-zA-z0-9_]+}(\\.png)?", (context) -> {
+        pippo.getApplication().GET("/helm/{username: [a-zA-z0-9_]+}.png", (context) -> {
             String username = context.getParameter("username").toString();
             writeImage(context, ImageProcessorLegacy.helm(username, 160));
         });
-        pippo.getApplication().GET("/helm/{username: [a-zA-z0-9_]+}/{size: [0-9]+}(\\.png)?", (context) -> {
+        pippo.getApplication().GET("/helm/{username: [a-zA-z0-9_]+}/{size: [0-9]+}.png", (context) -> {
             int size = context.getParameter("size").toInt(160);
             String username = context.getParameter("username").toString();
             writeImage(context, ImageProcessorLegacy.helm(username, size));
         });
         
         // ### /body
-        pippo.getApplication().GET("/body/{username: [a-zA-z0-9_]+}(\\.png)?", (context) -> {
+        pippo.getApplication().GET("/body/{username: [a-zA-z0-9_]+}.png", (context) -> {
             String username = context.getParameter("username").toString();
             writeImage(context, ImageProcessorLegacy.body(username, 160));
         });
-        pippo.getApplication().GET("/body/{username: [a-zA-z0-9_]+}/{size: [0-9]+}(\\.png)?", (context) -> {
+        pippo.getApplication().GET("/body/{username: [a-zA-z0-9_]+}/{size: [0-9]+}.png", (context) -> {
             int size = context.getParameter("size").toInt(160);
             String username = context.getParameter("username").toString();
             writeImage(context, ImageProcessorLegacy.body(username, size));
         });
         
         // ### /skin
-        pippo.getApplication().GET("/skin/{username}(\\.png)?", (context) -> {
+        pippo.getApplication().GET("/skin/{username}.png", (context) -> {
             String username = context.getParameter("username").toString();
             BufferedImage skin = skinRepository.getSkin(username, false);
             if (skin == null) {
@@ -83,7 +83,7 @@ public class SkinService {
         });
         
         // ### /cape
-        pippo.getApplication().GET("/cape/{username}(\\.png)?", (context) -> {
+        pippo.getApplication().GET("/cape/{username}.png", (context) -> {
             String username = context.getParameter("username").toString();
             BufferedImage cape = skinRepository.getCape(username);
             if (cape == null) {
@@ -110,7 +110,6 @@ public class SkinService {
             String username = context.getParameter("username").toString();
             skinRepository.clearCapeCache(username);
             CloudFlareUtil.clearCache(
-                "/cape/" + username,
                 "/cape/" + username + ".png"
             );
             context.status(200);
@@ -122,8 +121,10 @@ public class SkinService {
             String username = context.getParameter("username").toString();
             skinRepository.clearSkinCache(username);
             CloudFlareUtil.clearCache(
-                "/skin/" + username,
-                "/skin/" + username + ".png"
+                "/skin/" + username + ".png",
+                "/helm/" + username + ".png",
+                "/head/" + username + ".png",
+                "/body/" + username + ".png"
             );
             context.status(200);
             context.send("OK");
