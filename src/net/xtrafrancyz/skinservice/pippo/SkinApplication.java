@@ -17,40 +17,40 @@ import java.io.IOException;
 public class SkinApplication extends Application {
     public SkinApplication(SkinService service) {
         // ### /head
-        GET("/head/{username: [a-zA-z0-9_]+}.png", (context) -> {
+        GET("/head/{username: [a-zA-z0-9_]+}\\.png", (context) -> {
             String username = context.getParameter("username").toString();
             writeImage(context, ImageProcessorLegacy.head(username, 160));
         });
-        GET("/head/{username: [a-zA-z0-9_]+}/{size: [0-9]+}.png", (context) -> {
+        GET("/head/{username: [a-zA-z0-9_]+}/{size: [0-9]+}\\.png", (context) -> {
             int size = context.getParameter("size").toInt(160);
             String username = context.getParameter("username").toString();
             writeImage(context, ImageProcessorLegacy.head(username, size));
         });
         
         // ### /helm
-        GET("/helm/{username: [a-zA-z0-9_]+}.png", (context) -> {
+        GET("/helm/{username: [a-zA-z0-9_]+}\\.png", (context) -> {
             String username = context.getParameter("username").toString();
             writeImage(context, ImageProcessorLegacy.helm(username, 160));
         });
-        GET("/helm/{username: [a-zA-z0-9_]+}/{size: [0-9]+}.png", (context) -> {
+        GET("/helm/{username: [a-zA-z0-9_]+}/{size: [0-9]+}\\.png", (context) -> {
             int size = context.getParameter("size").toInt(160);
             String username = context.getParameter("username").toString();
             writeImage(context, ImageProcessorLegacy.helm(username, size));
         });
         
         // ### /body
-        GET("/body/{username: [a-zA-z0-9_]+}.png", (context) -> {
+        GET("/body/{username: [a-zA-z0-9_]+}\\.png", (context) -> {
             String username = context.getParameter("username").toString();
             writeImage(context, ImageProcessorLegacy.body(username, 160));
         });
-        GET("/body/{username: [a-zA-z0-9_]+}/{size: [0-9]+}.png", (context) -> {
+        GET("/body/{username: [a-zA-z0-9_]+}/{size: [0-9]+}\\.png", (context) -> {
             int size = context.getParameter("size").toInt(160);
             String username = context.getParameter("username").toString();
             writeImage(context, ImageProcessorLegacy.body(username, size));
         });
         
         // ### /skin
-        GET("/skin/{username}.png", (context) -> {
+        GET("/skin/{username}\\.png", (context) -> {
             String username = context.getParameter("username").toString();
             BufferedImage skin = service.skinRepository.getSkin(username, false);
             if (skin == null) {
@@ -62,7 +62,7 @@ public class SkinApplication extends Application {
         });
         
         // ### /cape
-        GET("/cape/{username}.png", (context) -> {
+        GET("/cape/{username}\\.png", (context) -> {
             String username = context.getParameter("username").toString();
             BufferedImage cape = service.skinRepository.getCape(username);
             if (cape == null) {
