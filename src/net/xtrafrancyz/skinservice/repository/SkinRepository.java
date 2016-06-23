@@ -47,6 +47,8 @@ public class SkinRepository {
             .maximumSize(config.cacheSize)
             .expireAfterAccess(config.cacheExpireMinutes, TimeUnit.MINUTES)
             .build(username -> this.fetch(capePath + username + ".png"));
+        
+        ImageIO.setUseCache(false);
     }
     
     public BufferedImage getSkin(String username, boolean orDefault) {
@@ -76,6 +78,13 @@ public class SkinRepository {
                 img = ImageIO.read(new URL(path));
             else if (access == Access.FILE)
                 img = ImageIO.read(new File(path));
+            
+            // Преобразование типа изображения
+            if (img != null && img.getType() != BufferedImage.TYPE_INT_ARGB) {
+                BufferedImage temp = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                temp.getGraphics().drawImage(img, 0, 0, null);
+                img = temp;
+            }
         } catch (Exception ignored) {}
         return img;
     }
