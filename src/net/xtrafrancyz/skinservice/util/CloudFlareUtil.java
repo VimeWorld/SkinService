@@ -2,14 +2,12 @@ package net.xtrafrancyz.skinservice.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.internal.Streams;
-import com.google.gson.stream.JsonWriter;
 
 import net.xtrafrancyz.skinservice.Config;
 import net.xtrafrancyz.skinservice.SkinService;
 
+import java.io.DataOutputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,13 +31,12 @@ public class CloudFlareUtil {
             HttpURLConnection conn = null;
             try {
                 conn = (HttpURLConnection) url.openConnection();
-                conn.setDoOutput(true);
                 conn.setRequestMethod("DELETE");
-                conn.setRequestProperty("User-Agent", "SkinService");
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setRequestProperty("X-Auth-Email", config.email);
                 conn.setRequestProperty("X-Auth-Key", config.key);
                 
+                conn.setDoOutput(true);
                 OutputStream out = conn.getOutputStream();
                 JsonArray files = new JsonArray();
                 for (String url0 : urls) {
@@ -49,9 +46,9 @@ public class CloudFlareUtil {
                 }
                 JsonObject json = new JsonObject();
                 json.add("files", files);
-                JsonWriter writer = new JsonWriter(new OutputStreamWriter(out));
-                Streams.write(json, writer);
+                new DataOutputStream(out).writeBytes(json.toString());
                 out.flush();
+                out.close();
                 
                 conn.getResponseCode();
             } catch (Exception ex) {
