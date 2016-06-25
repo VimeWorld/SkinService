@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
  * @author xtrafrancyz
  */
 public class SkinRepository {
-    private LoadingCache<String, BufferedImage> skins;
-    private LoadingCache<String, BufferedImage> capes;
+    private LoadingCache<String, ImageContainer> skins;
+    private LoadingCache<String, ImageContainer> capes;
     
     private Access access;
     private String skinPath;
@@ -42,26 +42,26 @@ public class SkinRepository {
         skins = Caffeine.newBuilder()
             .maximumSize(config.cacheSize)
             .expireAfterAccess(config.cacheExpireMinutes, TimeUnit.MINUTES)
-            .build(username -> this.fetch(skinPath + username + ".png"));
+            .build(username -> new ImageContainer(this.fetch(skinPath + username + ".png")));
         
         capes = Caffeine.newBuilder()
             .maximumSize(config.cacheSize)
             .expireAfterAccess(config.cacheExpireMinutes, TimeUnit.MINUTES)
-            .build(username -> this.fetch(capePath + username + ".png"));
+            .build(username -> new ImageContainer(this.fetch(capePath + username + ".png")));
         
         ImageIO.setUseCache(false);
     }
     
     public BufferedImage getSkin(String username, boolean orDefault) {
-        BufferedImage img = skins.get(username);
-        if (img == null && orDefault)
+        ImageContainer img = skins.get(username);
+        if (img.img == null && orDefault)
             return defaultSkin;
         else
-            return img;
+            return img.img;
     }
     
     public BufferedImage getCape(String username) {
-        return capes.get(username);
+        return capes.get(username).img;
     }
     
     public void clearCapeCache(String username) {
@@ -96,5 +96,13 @@ public class SkinRepository {
     private enum Access {
         URL,
         FILE
+    }
+    
+    private static class ImageContainer {
+        final BufferedImage img;
+        
+        public ImageContainer(BufferedImage img) {
+            this.img = img;
+        }
     }
 }
