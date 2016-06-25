@@ -50,8 +50,14 @@ public class SkinApplication extends Application {
             writeImage(context, ImageProcessorLegacy.body(username, size));
         });
         
-        // ### /skin
-        GET("/skin/{username}\\.png", (context) -> {
+        // ### /cape
+        GET("/cape/{username}\\.png", (context) -> {
+            String username = context.getParameter("username").toString();
+            writeImage(context, ImageProcessorLegacy.cape(username));
+        });
+        
+        // ### /raw/skin
+        GET("/raw/skin/{username}\\.png", (context) -> {
             String username = context.getParameter("username").toString();
             BufferedImage skin = service.skinRepository.getSkin(username, false);
             if (skin == null) {
@@ -62,8 +68,8 @@ public class SkinApplication extends Application {
             }
         });
         
-        // ### /cape
-        GET("/cape/{username}\\.png", (context) -> {
+        // ### /raw/cape
+        GET("/raw/cape/{username}\\.png", (context) -> {
             String username = context.getParameter("username").toString();
             BufferedImage cape = service.skinRepository.getCape(username);
             if (cape == null) {
@@ -90,6 +96,7 @@ public class SkinApplication extends Application {
             String username = context.getParameter("username").toString();
             service.skinRepository.clearCapeCache(username);
             CloudFlareUtil.clearCache(
+                "/raw/cape/" + username + ".png",
                 "/cape/" + username + ".png"
             );
             context.status(200);
@@ -101,7 +108,7 @@ public class SkinApplication extends Application {
             String username = context.getParameter("username").toString();
             service.skinRepository.clearSkinCache(username);
             CloudFlareUtil.clearCache(
-                "/skin/" + username + ".png",
+                "/raw/skin/" + username + ".png",
                 "/helm/" + username + ".png",
                 "/head/" + username + ".png",
                 "/body/" + username + ".png"
@@ -112,7 +119,6 @@ public class SkinApplication extends Application {
         
         ALL(".*", (context) -> {
             Log.info(context.getRequestMethod() + " " + context.getRequestUri());
-            
         }).runAsFinally();
         
         setErrorHandler(new SkinErrorHandler(this));
