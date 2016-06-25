@@ -54,12 +54,12 @@ public class ImageProcessorLegacy {
     
     public static byte[] cape(String username) {
         BufferedImage cape = SkinService.instance().skinRepository.getCape(username);
+        if (cape == null)
+            return null;
+        
         BufferedImage img = new BufferedImage(10, 16, BufferedImage.TYPE_INT_ARGB);
-        
         ImageUtil.copy(cape, 1, 1, 11, 17, img, 0, 0);
-        
         img = ImageUtil.scale(img, 150, 240);
-        
         return ImageUtil.toByteArray(img);
     }
 }

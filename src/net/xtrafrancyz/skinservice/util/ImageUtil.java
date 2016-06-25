@@ -84,6 +84,8 @@ public class ImageUtil {
     };
     
     public static byte[] toByteArray(BufferedImage img) {
+        if (img == null)
+            return null;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         try {
             pngEncoder.get().encode(img, stream);

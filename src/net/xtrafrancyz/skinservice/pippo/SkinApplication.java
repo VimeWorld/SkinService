@@ -59,25 +59,13 @@ public class SkinApplication extends Application {
         // ### /raw/skin
         GET("/raw/skin/{username}\\.png", (context) -> {
             String username = context.getParameter("username").toString();
-            BufferedImage skin = service.skinRepository.getSkin(username, false);
-            if (skin == null) {
-                context.getResponse().status(404);
-                context.getResponse().send("404 Not found");
-            } else {
-                writeImage(context, ImageUtil.toByteArray(skin));
-            }
+            writeImage(context, service.skinRepository.getSkin(username, false));
         });
         
         // ### /raw/cape
         GET("/raw/cape/{username}\\.png", (context) -> {
             String username = context.getParameter("username").toString();
-            BufferedImage cape = service.skinRepository.getCape(username);
-            if (cape == null) {
-                context.getResponse().status(404);
-                context.getResponse().send("404 Not found");
-            } else {
-                writeImage(context, ImageUtil.toByteArray(cape));
-            }
+            writeImage(context, service.skinRepository.getCape(username));
         });
         
         // ### /private/0 auth
@@ -124,7 +112,16 @@ public class SkinApplication extends Application {
         setErrorHandler(new SkinErrorHandler(this));
     }
     
+    private static void writeImage(RouteContext context, BufferedImage image) {
+        writeImage(context, ImageUtil.toByteArray(image));
+    }
+    
     private static void writeImage(RouteContext context, byte[] image) {
+        if (image == null) {
+            context.getResponse().status(404);
+            context.getResponse().send("404 Not found");
+            return;
+        }
         context.setHeader("Content-Type", "image/png");
         context.getResponse().ok();
         try {
