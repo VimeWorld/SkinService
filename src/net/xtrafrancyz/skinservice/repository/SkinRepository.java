@@ -5,6 +5,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import net.xtrafrancyz.skinservice.Config;
 import net.xtrafrancyz.skinservice.SkinService;
+import net.xtrafrancyz.skinservice.util.Log;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -86,6 +87,9 @@ public class SkinRepository {
                 img = temp;
             }
         } catch (Exception ignored) {}
+        
+        Log.info("Fetched: " + path);
+        
         return img;
     }
     

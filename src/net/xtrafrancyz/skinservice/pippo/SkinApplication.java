@@ -7,6 +7,7 @@ import net.xtrafrancyz.skinservice.SkinService;
 import net.xtrafrancyz.skinservice.processor.ImageProcessorLegacy;
 import net.xtrafrancyz.skinservice.util.CloudFlareUtil;
 import net.xtrafrancyz.skinservice.util.ImageUtil;
+import net.xtrafrancyz.skinservice.util.Log;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -108,6 +109,11 @@ public class SkinApplication extends Application {
             context.status(200);
             context.send("OK");
         });
+        
+        ALL(".*", (context) -> {
+            Log.info(context.getRequestMethod() + " " + context.getRequestUri());
+            
+        }).runAsFinally();
         
         setErrorHandler(new SkinErrorHandler(this));
     }
