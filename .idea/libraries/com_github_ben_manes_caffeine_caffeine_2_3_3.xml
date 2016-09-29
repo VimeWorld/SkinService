@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="com.github.ben-manes.caffeine:caffeine:2.3.3" type="repository">
+    <properties maven-id="com.github.ben-manes.caffeine:caffeine:2.3.3" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/caffeine-2.3.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jsr305-3.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/error_prone_annotations-2.0.11.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/caffeine-2.3.3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/caffeine-2.3.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
