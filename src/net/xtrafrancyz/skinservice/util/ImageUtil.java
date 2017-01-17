@@ -76,12 +76,9 @@ public class ImageUtil {
         to.setRGB(toX1, toY1, w, h, temp, 0, w);
     }
     
-    private static final ThreadLocal<PngEncoder> pngEncoder = new ThreadLocal<PngEncoder>() {
-        @Override
-        protected PngEncoder initialValue() {
-            return new PngEncoder(PngEncoder.COLOR_TRUECOLOR_ALPHA, PngEncoder.BEST_SPEED);
-        }
-    };
+    private static final ThreadLocal<PngEncoder> pngEncoder = ThreadLocal.withInitial(() ->
+        new PngEncoder(PngEncoder.COLOR_TRUECOLOR_ALPHA, PngEncoder.BEST_SPEED)
+    );
     
     public static byte[] toByteArray(BufferedImage img) {
         if (img == null)
