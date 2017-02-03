@@ -1,18 +1,15 @@
-## Directory-based project format
-#.idea/
-# if you remove the above rule, at least ignore user-specific stuff:
-.idea/workspace.xml
-.idea/tasks.xml
-# and these sensitive or high-churn files:
-.idea/dataSources.ids
-.idea/dataSources.xml
-.idea/sqlDataSources.xml
-.idea/dynamic.xml
+# User-specific stuff:
+.idea/**/workspace.xml
+.idea/**/tasks.xml
 
-## File-based project format
-*.ipr
-*.iws
-#*.iml
+# Sensitive or high-churn files:
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.xml
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
 
-## Additional for IntelliJ
-out/
+# IntelliJ
+/out/
