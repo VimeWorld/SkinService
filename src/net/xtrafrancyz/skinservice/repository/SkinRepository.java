@@ -82,7 +82,8 @@ public class SkinRepository {
                 img = ImageIO.read(new File(path));
         } catch (Exception ignored) {}
         
-        Log.info("Fetched: " + path);
+        if (SkinService.instance().config.debug)
+            Log.info("Fetched: " + path);
         
         if (img == null)
             return null;

@@ -70,7 +70,7 @@ public class SkinApplication extends Application {
         // ### /game
         GET("/game/v1/skin/{username: [a-zA-z0-9_]+}\\.png", context -> {
             String username = context.getParameter("username").toString();
-            writeImage(context, Resizer.getSkin(username, true, 64, 32));
+            writeImage(context, Resizer.getSkin(username, false, 64, 32));
         });
         
         GET("/game/v1/cape/{username: [a-zA-z0-9_]+}\\.png", context -> {
@@ -80,12 +80,23 @@ public class SkinApplication extends Application {
         
         GET("/game/v2/skin/{username: [a-zA-z0-9_]+}\\.png", context -> {
             String username = context.getParameter("username").toString();
-            writeImage(context, service.skinRepository.getSkin(username, true));
+            writeImage(context, service.skinRepository.getSkin(username, false));
         });
         
         GET("/game/v2/cape/{username: [a-zA-z0-9_]+}\\.png", context -> {
             String username = context.getParameter("username").toString();
             writeImage(context, Resizer.getCape(username, 64, 32));
+        });
+    
+    
+        // ### /raw
+        GET("/raw/cape/{username: [a-zA-z0-9_]+}\\.png", context -> {
+            String username = context.getParameter("username").toString();
+            writeImage(context, service.skinRepository.getCape(username));
+        });
+        GET("/raw/skin/{username: [a-zA-z0-9_]+}\\.png", context -> {
+            String username = context.getParameter("username").toString();
+            writeImage(context, service.skinRepository.getSkin(username, false));
         });
         
         
@@ -130,8 +141,13 @@ public class SkinApplication extends Application {
         
         ALL(".*", context -> {
             if (service.config.debug) {
+                String ip = context.getHeader("CF-Connecting-IP");
+                if (ip == null)
+                    ip = context.getHeader("X-Forwarded-For");
+                if (ip == null)
+                    ip = context.getRequest().getClientIp();
                 long start = context.getLocal("_start");
-                Log.info("[" + Math.round((System.nanoTime() - start) / 10000f) / 100f + " ms] " + context.getRequestMethod() + " " + context.getRequestUri());
+                Log.info("[" + Math.round((System.nanoTime() - start) / 10000f) / 100f + " ms] " + context.getRequestMethod() + " " + context.getRequestUri() + "(" + ip + ")");
             } else {
                 Log.info(context.getRequestMethod() + " " + context.getRequestUri());
             }
