@@ -8,7 +8,6 @@ import ro.pippo.undertow.UndertowServer;
 import net.xtrafrancyz.skinservice.pippo.SkinApplication;
 import net.xtrafrancyz.skinservice.repository.SkinRepository;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -17,8 +16,6 @@ import java.nio.file.Files;
  * @author xtrafrancyz
  */
 public class SkinService {
-    public static final int DEFAULT_IMAGE_TYPE = BufferedImage.TYPE_INT_ARGB;
-    
     private static SkinService instance;
     
     public final Gson gson = new GsonBuilder().create();

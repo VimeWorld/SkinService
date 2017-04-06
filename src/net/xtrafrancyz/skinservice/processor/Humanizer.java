@@ -1,65 +1,58 @@
 package net.xtrafrancyz.skinservice.processor;
 
 import net.xtrafrancyz.skinservice.SkinService;
-import net.xtrafrancyz.skinservice.util.ImageUtil;
-
-import java.awt.image.BufferedImage;
 
 /**
  * @author xtrafrancyz
  */
 public class Humanizer {
-    public static byte[] head(String username, int size) {
+    public static Image head(String username, int size) {
         if (size > 300)
             size = 300;
-        BufferedImage skin = SkinService.instance().skinRepository.getSkin(username, true);
-        BufferedImage img = new BufferedImage(8, 8, SkinService.DEFAULT_IMAGE_TYPE);
+        Image skin = SkinService.instance().skinRepository.getSkin(username, true);
+        Image img = new Image(8, 8);
         
-        ImageUtil.copy(skin, 8, 8, 16, 16, img, 0, 0);
-        img = ImageUtil.scale(img, size, size);
+        img.copyFrom(skin, 8, 8, 16, 16, 0, 0);
         
-        return ImageUtil.toByteArray(img);
+        return img.scale(size, size);
     }
     
-    public static byte[] helm(String username, int size) {
+    public static Image helm(String username, int size) {
         if (size > 300)
             size = 300;
-        BufferedImage skin = SkinService.instance().skinRepository.getSkin(username, true);
-        BufferedImage img = new BufferedImage(8, 8, SkinService.DEFAULT_IMAGE_TYPE);
+        Image skin = SkinService.instance().skinRepository.getSkin(username, true);
+        Image img = new Image(8, 8);
         
-        ImageUtil.copy(skin, 8, 8, 16, 16, img, 0, 0);
-        ImageUtil.copyWithAlpha(skin, 40, 8, 48, 16, img, 0, 0);
-        img = ImageUtil.scale(img, size, size);
+        img.copyFrom(skin, 8, 8, 16, 16, 0, 0);
+        img.copyWithAlphaFrom(skin, 40, 8, 48, 16, 0, 0);
         
-        return ImageUtil.toByteArray(img);
+        return img.scale(size, size);
     }
     
-    public static byte[] body(String username, int size) {
+    public static Image body(String username, int size) {
         if (size > 300)
             size = 300;
-        BufferedImage skin = SkinService.instance().skinRepository.getSkin(username, true);
-        BufferedImage img = new BufferedImage(16, 32, SkinService.DEFAULT_IMAGE_TYPE);
+        Image skin = SkinService.instance().skinRepository.getSkin(username, true);
+        Image img = new Image(16, 32);
         
-        ImageUtil.copy(skin, 8, 8, 16, 16, img, 4, 0); // head
-        ImageUtil.copy(skin, 44, 20, 48, 32, img, 0, 8); // left arm (real right)
-        ImageUtil.copy(skin, 20, 20, 28, 32, img, 4, 8); // body
-        ImageUtil.copyFlippedX(skin, 44, 20, 48, 32, img, 12, 8); // right arm (real left)
-        ImageUtil.copy(skin, 4, 20, 8, 32, img, 4, 20); // left leg (real right)
-        ImageUtil.copyFlippedX(skin, 4, 20, 8, 32, img, 8, 20); // right leg (real right)
+        img.copyFrom(skin, 8, 8, 16, 16, 4, 0); // head
+        img.copyFrom(skin, 44, 20, 48, 32, 0, 8); // left arm (real right)
+        img.copyFrom(skin, 20, 20, 28, 32, 4, 8); // body
+        img.copyFlippedXFrom(skin, 44, 20, 48, 32, 12, 8); // right arm (real left)
+        img.copyFrom(skin, 4, 20, 8, 32, 4, 20); // left leg (real right)
+        img.copyFlippedXFrom(skin, 4, 20, 8, 32, 8, 20); // right leg (real right)
         
-        img = ImageUtil.scale(img, size, size * 2);
-        
-        return ImageUtil.toByteArray(img);
+        return img.scale(size, size * 2);
     }
     
-    public static byte[] cape(String username) {
-        BufferedImage cape = SkinService.instance().skinRepository.getCape(username);
+    public static Image cape(String username) {
+        Image cape = SkinService.instance().skinRepository.getCape(username);
         if (cape == null)
             return null;
+        Image img = new Image(10, 16);
         
-        BufferedImage img = new BufferedImage(10, 16, SkinService.DEFAULT_IMAGE_TYPE);
-        ImageUtil.copy(cape, 1, 1, 11, 17, img, 0, 0);
-        img = ImageUtil.scale(img, 150, 240);
-        return ImageUtil.toByteArray(img);
+        img.copyFrom(cape, 1, 1, 11, 17, 0, 0);
+        
+        return img.scale(150, 240);
     }
 }

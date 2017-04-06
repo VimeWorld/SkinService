@@ -5,6 +5,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import net.xtrafrancyz.skinservice.Config;
 import net.xtrafrancyz.skinservice.SkinService;
+import net.xtrafrancyz.skinservice.processor.Image;
 import net.xtrafrancyz.skinservice.util.Log;
 
 import javax.imageio.ImageIO;
@@ -23,7 +24,7 @@ public class SkinRepository {
     private Access access;
     private String skinPath;
     private String capePath;
-    private BufferedImage defaultSkin;
+    private Image defaultSkin;
     
     public SkinRepository(SkinService service) {
         Config.RepositoryConfig config = service.config.repository;
@@ -33,7 +34,7 @@ public class SkinRepository {
         capePath = config.capePath;
         
         try {
-            defaultSkin = ImageIO.read(new File(config.defaultSkin));
+            defaultSkin = new Image(ImageIO.read(new File(config.defaultSkin)));
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException("Cannot load default skin");
@@ -52,7 +53,7 @@ public class SkinRepository {
         ImageIO.setUseCache(false);
     }
     
-    public BufferedImage getSkin(String username, boolean orDefault) {
+    public Image getSkin(String username, boolean orDefault) {
         ImageContainer img = skins.get(username);
         if (img.img == null && orDefault)
             return defaultSkin;
@@ -60,7 +61,7 @@ public class SkinRepository {
             return img.img;
     }
     
-    public BufferedImage getCape(String username) {
+    public Image getCape(String username) {
         return capes.get(username).img;
     }
     
@@ -72,25 +73,21 @@ public class SkinRepository {
         skins.invalidate(username);
     }
     
-    private BufferedImage fetch(String path) {
+    private Image fetch(String path) {
         BufferedImage img = null;
         try {
             if (access == Access.URL)
                 img = ImageIO.read(new URL(path));
             else if (access == Access.FILE)
                 img = ImageIO.read(new File(path));
-            
-            // Преобразование типа изображения
-            if (img != null && img.getType() != SkinService.DEFAULT_IMAGE_TYPE) {
-                BufferedImage temp = new BufferedImage(img.getWidth(), img.getHeight(), SkinService.DEFAULT_IMAGE_TYPE);
-                temp.getGraphics().drawImage(img, 0, 0, null);
-                img = temp;
-            }
         } catch (Exception ignored) {}
         
         Log.info("Fetched: " + path);
         
-        return img;
+        if (img == null)
+            return null;
+        else
+            return new Image(img);
     }
     
     private enum Access {
@@ -99,9 +96,9 @@ public class SkinRepository {
     }
     
     private static class ImageContainer {
-        final BufferedImage img;
+        final Image img;
         
-        public ImageContainer(BufferedImage img) {
+        public ImageContainer(Image img) {
             this.img = img;
         }
     }

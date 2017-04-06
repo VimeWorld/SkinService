@@ -5,12 +5,11 @@ import ro.pippo.core.route.RouteContext;
 
 import net.xtrafrancyz.skinservice.SkinService;
 import net.xtrafrancyz.skinservice.processor.Humanizer;
+import net.xtrafrancyz.skinservice.processor.Image;
 import net.xtrafrancyz.skinservice.processor.Resizer;
-import net.xtrafrancyz.skinservice.util.CloudFlareUtil;
-import net.xtrafrancyz.skinservice.util.ImageUtil;
+import net.xtrafrancyz.skinservice.util.CloudflareUtil;
 import net.xtrafrancyz.skinservice.util.Log;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 /**
@@ -105,7 +104,7 @@ public class SkinApplication extends Application {
         DELETE("/private/{token}/cache/cape/{username: [a-zA-z0-9_]+}", context -> {
             String username = context.getParameter("username").toString();
             service.skinRepository.invalidateCape(username);
-            CloudFlareUtil.clearCache(
+            CloudflareUtil.clearCache(
                 "/game/v1/cape/" + username + ".png",
                 "/game/v2/cape/" + username + ".png",
                 "/cape/" + username + ".png"
@@ -118,7 +117,7 @@ public class SkinApplication extends Application {
         DELETE("/private/{token}/cache/skin/{username: [a-zA-z0-9_]+}", context -> {
             String username = context.getParameter("username").toString();
             service.skinRepository.invalidateSkin(username);
-            CloudFlareUtil.clearCache(
+            CloudflareUtil.clearCache(
                 "/game/v1/skin/" + username + ".png",
                 "/game/v2/skin/" + username + ".png",
                 "/helm/" + username + ".png",
@@ -142,20 +141,16 @@ public class SkinApplication extends Application {
         setErrorHandler(new SkinErrorHandler(this));
     }
     
-    private static void writeImage(RouteContext context, BufferedImage image) {
-        writeImage(context, ImageUtil.toByteArray(image));
-    }
-    
-    private static void writeImage(RouteContext context, byte[] image) {
+    private static void writeImage(RouteContext context, Image image) {
         if (image == null) {
             context.getResponse().status(404);
-            context.getResponse().send("404 Not found");
+            context.send("404 Not found");
             return;
         }
         context.setHeader("Content-Type", "image/png");
         context.getResponse().ok();
         try {
-            context.getResponse().getOutputStream().write(image);
+            context.getResponse().getOutputStream().write(image.encode());
         } catch (IOException e) {
             e.printStackTrace();
         }

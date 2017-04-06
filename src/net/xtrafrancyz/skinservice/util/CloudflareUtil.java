@@ -11,16 +11,20 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author xtrafrancyz
  */
-public class CloudFlareUtil {
+public class CloudflareUtil {
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
+    
     public static void clearCache(String... urls) {
         Config.CloudFlareConfig config = SkinService.instance().config.cloudflare;
         if (!config.enabled)
             return;
-        Thread th = new Thread(() -> {
+        executor.submit(() -> {
             URL url;
             try {
                 url = new URL("https://api.cloudflare.com/client/v4/zones/" + config.zoneId + "/purge_cache");
@@ -58,8 +62,5 @@ public class CloudFlareUtil {
                     conn.disconnect();
             }
         });
-        th.setDaemon(true);
-        th.setName("CloudFlare request");
-        th.start();
     }
 }

@@ -1,24 +1,21 @@
 package net.xtrafrancyz.skinservice.processor;
 
 import net.xtrafrancyz.skinservice.SkinService;
-import net.xtrafrancyz.skinservice.util.ImageUtil;
 import net.xtrafrancyz.skinservice.util.Log;
-
-import java.awt.image.BufferedImage;
 
 /**
  * @author xtrafrancyz
  */
 public class Resizer {
-    public static BufferedImage getSkin(String username, boolean orDefault, int width, int height) {
-        BufferedImage skin = SkinService.instance().skinRepository.getSkin(username, orDefault);
+    public static Image getSkin(String username, boolean orDefault, int width, int height) {
+        Image skin = SkinService.instance().skinRepository.getSkin(username, orDefault);
         if (width == skin.getWidth() && height == skin.getHeight())
             return skin;
         
         if (width == 64 && height == 32) {
             if (skin.getWidth() == 64 && skin.getHeight() == 64) {
-                BufferedImage result = new BufferedImage(width, height, SkinService.DEFAULT_IMAGE_TYPE);
-                ImageUtil.copy(skin, 0, 0, 64, 32, result, 0, 0);
+                Image result = new Image(width, height);
+                result.copyFrom(skin, 0, 0, 64, 32);
                 return result;
             }
         }
@@ -26,8 +23,8 @@ public class Resizer {
         return skin;
     }
     
-    public static BufferedImage getCape(String username, int width, int height) {
-        BufferedImage cape = SkinService.instance().skinRepository.getCape(username);
+    public static Image getCape(String username, int width, int height) {
+        Image cape = SkinService.instance().skinRepository.getCape(username);
         if (cape == null)
             return null;
         if (width == cape.getWidth() && height == cape.getHeight())
@@ -35,14 +32,14 @@ public class Resizer {
         
         if (width == 64 && height == 32) {
             if (cape.getWidth() == 22 && cape.getHeight() == 17) {
-                BufferedImage result = new BufferedImage(width, height, SkinService.DEFAULT_IMAGE_TYPE);
-                ImageUtil.copy(cape, 0, 0, 22, 17, result, 0, 0);
+                Image result = new Image(width, height);
+                result.copyFrom(cape, 0, 0, 22, 17);
                 return result;
             }
         } else if (width == 22 && height == 17) {
             if (cape.getWidth() == 64 && cape.getHeight() == 32) {
-                BufferedImage result = new BufferedImage(width, height, SkinService.DEFAULT_IMAGE_TYPE);
-                ImageUtil.copy(cape, 0, 0, 22, 17, result, 0, 0);
+                Image result = new Image(width, height);
+                result.copyFrom(cape, 0, 0, 22, 17);
                 return result;
             }
         }
