@@ -12,7 +12,7 @@ public class Humanizer {
         Image skin = SkinService.instance().skinRepository.getSkin(username, true);
         Image img = new Image(8, 8);
         
-        img.copyFrom(skin, 8, 8, 16, 16, 0, 0);
+        img.copyFrom(skin, 8, 8, 16, 16);
         
         return img.scale(size, size);
     }
@@ -23,8 +23,8 @@ public class Humanizer {
         Image skin = SkinService.instance().skinRepository.getSkin(username, true);
         Image img = new Image(8, 8);
         
-        img.copyFrom(skin, 8, 8, 16, 16, 0, 0);
-        img.copyWithAlphaFrom(skin, 40, 8, 48, 16, 0, 0);
+        img.copyFrom(skin, 8, 8, 16, 16);
+        img.copyWithAlphaFrom(skin, 40, 8, 48, 16);
         
         return img.scale(size, size);
     }
@@ -35,12 +35,27 @@ public class Humanizer {
         Image skin = SkinService.instance().skinRepository.getSkin(username, true);
         Image img = new Image(16, 32);
         
-        img.copyFrom(skin, 8, 8, 16, 16, 4, 0); // head
-        img.copyFrom(skin, 44, 20, 48, 32, 0, 8); // left arm (real right)
-        img.copyFrom(skin, 20, 20, 28, 32, 4, 8); // body
-        img.copyFlippedXFrom(skin, 44, 20, 48, 32, 12, 8); // right arm (real left)
-        img.copyFrom(skin, 4, 20, 8, 32, 4, 20); // left leg (real right)
-        img.copyFlippedXFrom(skin, 4, 20, 8, 32, 8, 20); // right leg (real right)
+        // Head
+        img.copyFrom(skin, 8, 8, 16, 16, 4, 0);
+        // Torso
+        img.copyFrom(skin, 20, 20, 28, 32, 4, 8);
+        
+        // Left arm
+        img.copyFrom(skin, 44, 20, 48, 32, 0, 8);
+        // Right arm
+        if (skin.getHeight() == 64)
+            img.copyFrom(skin, 36, 52, 40, 64, 12, 8);
+        else
+            img.copyFlippedXFrom(skin, 44, 20, 48, 32, 12, 8);
+        
+        // Left leg
+        img.copyFrom(skin, 4, 20, 8, 32, 4, 20);
+        // Right leg
+        if (skin.getHeight() == 64)
+            img.copyFrom(skin, 20, 52, 24, 64, 8, 20);
+        else
+            img.copyFlippedXFrom(skin, 4, 20, 8, 32, 8, 20);
+        
         
         return img.scale(size, size * 2);
     }
@@ -51,7 +66,7 @@ public class Humanizer {
             return null;
         Image img = new Image(10, 16);
         
-        img.copyFrom(cape, 1, 1, 11, 17, 0, 0);
+        img.copyFrom(cape, 1, 1, 11, 17);
         
         return img.scale(150, 240);
     }

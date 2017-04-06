@@ -52,6 +52,10 @@ public class Image {
         }
     }
     
+    public void copyWithAlphaFrom(Image from, int fromX1, int fromY1, int fromX2, int fromY2) {
+        copyWithAlphaFrom(from, fromX1, fromY1, fromX2, fromY2, 0, 0);
+    }
+    
     public void copyWithAlphaFrom(Image from, int fromX1, int fromY1, int fromX2, int fromY2, int toX1, int toY1) {
         int w = fromX2 - fromX1;
         int h = fromY2 - fromY1;
