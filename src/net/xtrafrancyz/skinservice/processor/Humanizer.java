@@ -8,12 +8,12 @@ import java.awt.image.BufferedImage;
 /**
  * @author xtrafrancyz
  */
-public class ImageProcessorLegacy {
+public class Humanizer {
     public static byte[] head(String username, int size) {
         if (size > 300)
             size = 300;
         BufferedImage skin = SkinService.instance().skinRepository.getSkin(username, true);
-        BufferedImage img = new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage img = new BufferedImage(8, 8, SkinService.DEFAULT_IMAGE_TYPE);
         
         ImageUtil.copy(skin, 8, 8, 16, 16, img, 0, 0);
         img = ImageUtil.scale(img, size, size);
@@ -25,7 +25,7 @@ public class ImageProcessorLegacy {
         if (size > 300)
             size = 300;
         BufferedImage skin = SkinService.instance().skinRepository.getSkin(username, true);
-        BufferedImage img = new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage img = new BufferedImage(8, 8, SkinService.DEFAULT_IMAGE_TYPE);
         
         ImageUtil.copy(skin, 8, 8, 16, 16, img, 0, 0);
         ImageUtil.copyWithAlpha(skin, 40, 8, 48, 16, img, 0, 0);
@@ -38,7 +38,7 @@ public class ImageProcessorLegacy {
         if (size > 300)
             size = 300;
         BufferedImage skin = SkinService.instance().skinRepository.getSkin(username, true);
-        BufferedImage img = new BufferedImage(16, 32, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage img = new BufferedImage(16, 32, SkinService.DEFAULT_IMAGE_TYPE);
         
         ImageUtil.copy(skin, 8, 8, 16, 16, img, 4, 0); // head
         ImageUtil.copy(skin, 44, 20, 48, 32, img, 0, 8); // left arm (real right)
@@ -57,7 +57,7 @@ public class ImageProcessorLegacy {
         if (cape == null)
             return null;
         
-        BufferedImage img = new BufferedImage(10, 16, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage img = new BufferedImage(10, 16, SkinService.DEFAULT_IMAGE_TYPE);
         ImageUtil.copy(cape, 1, 1, 11, 17, img, 0, 0);
         img = ImageUtil.scale(img, 150, 240);
         return ImageUtil.toByteArray(img);

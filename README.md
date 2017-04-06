@@ -23,20 +23,25 @@ GET /head/{username}/{size}.png
 GET /helm/{username}.png
 GET /helm/{username}/{size}.png
 ```
-Оригинальный скин:
-```
-GET /raw/skin/{username}.png
-```
 
 #### Плащ ####
 Задняя сторона плаща (которая чаще всего видна игрокам):
 ```
 GET /cape/{username}.png
 ```
-Оригинальный плащ:
+
+#### Скины и плащи для игры ####
+Для версий до 1.8:
 ```
-GET /raw/cape/{username}.png
+GET /game/v1/skin/{username}.png
+GET /game/v1/cape/{username}.png
 ```
+Для версий после 1.8:
+```
+GET /game/v2/skin/{username}.png
+GET /game/v2/cape/{username}.png
+```
+
 
 ## Приватное API ##
 Для доступа к приватному API необходимо иметь токен авторизации, который указывается в конфиге. Все приватные методы начинаются с `/private/{token}/`.

@@ -10,6 +10,7 @@ import java.util.Set;
 public class Config {
     public String host;
     public int port;
+    public boolean debug;
     public Set<String> tokens;
     
     public RepositoryConfig repository;

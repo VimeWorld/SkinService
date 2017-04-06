@@ -64,11 +64,11 @@ public class SkinRepository {
         return capes.get(username).img;
     }
     
-    public void clearCapeCache(String username) {
+    public void invalidateCape(String username) {
         capes.invalidate(username);
     }
     
-    public void clearSkinCache(String username) {
+    public void invalidateSkin(String username) {
         skins.invalidate(username);
     }
     
@@ -81,8 +81,8 @@ public class SkinRepository {
                 img = ImageIO.read(new File(path));
             
             // Преобразование типа изображения
-            if (img != null && img.getType() != BufferedImage.TYPE_INT_ARGB) {
-                BufferedImage temp = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            if (img != null && img.getType() != SkinService.DEFAULT_IMAGE_TYPE) {
+                BufferedImage temp = new BufferedImage(img.getWidth(), img.getHeight(), SkinService.DEFAULT_IMAGE_TYPE);
                 temp.getGraphics().drawImage(img, 0, 0, null);
                 img = temp;
             }
