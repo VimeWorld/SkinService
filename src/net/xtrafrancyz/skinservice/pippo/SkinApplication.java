@@ -147,7 +147,7 @@ public class SkinApplication extends Application {
                 if (ip == null)
                     ip = context.getRequest().getClientIp();
                 long start = context.getLocal("_start");
-                Log.info("[" + Math.round((System.nanoTime() - start) / 10000f) / 100f + " ms] " + context.getRequestMethod() + " " + context.getRequestUri() + "(" + ip + ")");
+                Log.info("[" + Math.round((System.nanoTime() - start) / 10000f) / 100f + " ms] " + context.getRequestMethod() + " " + context.getRequestUri() + " (" + ip + ")");
             } else {
                 Log.info(context.getRequestMethod() + " " + context.getRequestUri());
             }

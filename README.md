@@ -39,15 +39,15 @@ GET /raw/cape/{username}.png
 ```
 
 #### Скины и плащи для игры ####
-Для версий до 1.8:
+Скины:
 ```
-GET /game/v1/skin/{username}.png
-GET /game/v1/cape/{username}.png
+GET /game/v1/skin/{username}.png - Для версий 1.0 - 1.7.10
+GET /game/v2/skin/{username}.png - Для версий 1.8 и выше
 ```
-Для версий после 1.8:
+Плащи:
 ```
-GET /game/v2/skin/{username}.png
-GET /game/v2/cape/{username}.png
+GET /game/v1/cape/{username}.png - Для версий 1.0 - 1.5.2
+GET /game/v2/cape/{username}.png - Для версий 1.6 и выше
 ```
 
 
