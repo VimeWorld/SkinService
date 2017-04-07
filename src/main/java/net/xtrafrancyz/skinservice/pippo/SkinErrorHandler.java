@@ -13,7 +13,7 @@ public class SkinErrorHandler extends DefaultErrorHandler {
     }
     
     @Override
-    protected void renderDirectly(RouteContext routeContext) {
+    protected void renderDirectly(int statusCode, RouteContext routeContext) {
         routeContext.send("Hello. There's nothing here");
     }
 }

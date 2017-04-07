@@ -19,7 +19,7 @@ public class Resizer {
                 return result;
             }
         }
-        Log.warning("Can't transform akin of user '" + username + "' from " + skin.getWidth() + "x" + skin.getHeight() + " to " + width + "x" + height);
+        Log.warning("Can't transform skin of user '" + username + "' from " + skin.getWidth() + "x" + skin.getHeight() + " to " + width + "x" + height);
         return skin;
     }
     
