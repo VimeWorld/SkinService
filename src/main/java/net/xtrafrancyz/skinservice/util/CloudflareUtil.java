@@ -21,7 +21,7 @@ public class CloudflareUtil {
     private static final ExecutorService executor = Executors.newCachedThreadPool();
     
     public static void clearCache(String... urls) {
-        Config.CloudFlareConfig config = SkinService.instance().config.cloudflare;
+        Config.CloudflareConfig config = SkinService.instance().config.cloudflare;
         if (!config.enabled)
             return;
         executor.submit(() -> {

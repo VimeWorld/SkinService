@@ -1,24 +1,23 @@
 {
-	"host": "127.0.0.1",
-	"port": 991,
-	"debug": true,
-	"tokens": [
-		"AuThToKeN"
-	],
-	"repository": {
-		"type": "URL",
-		"skin-path": "http://mc.vimeworld.ru/launcher/skins/",
-		"cape-path": "http://mc.vimeworld.ru/launcher/cloaks/",
-		"default-skin": "steve.png",
-		"cache-size": 20000,
-		"cache-expire-minutes": 60
-	},
-	"cloudflare": {
-		"enabled": false,
-		"zone-id": "",
-		"auth-email": "",
-		"auth-key": "",
-		"cache-url": "skin.example.com",
-		"clear-https-cache": true
-	}
+  "host": "127.0.0.1",
+  "port": 991,
+  "debug": true,
+  "tokens": [
+    "AuThToKeN"
+  ],
+  "repository": {
+    "type": "URL",
+    "skin-path": "http://mc.vimeworld.ru/launcher/skins/{username}.png",
+    "cape-path": "http://mc.vimeworld.ru/launcher/cloaks/{username}.png",
+    "cache-size": 10000,
+    "cache-expire-minutes": 60
+  },
+  "cloudflare": {
+    "enabled": false,
+    "zone-id": "",
+    "auth-email": "",
+    "auth-key": "",
+    "cache-url": "skin.example.com",
+    "clear-https-cache": true
+  }
 }

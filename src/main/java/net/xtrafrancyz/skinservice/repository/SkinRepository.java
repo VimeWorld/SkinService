@@ -34,7 +34,7 @@ public class SkinRepository {
         capePath = config.capePath;
         
         try {
-            defaultSkin = new Image(ImageIO.read(new File(config.defaultSkin)));
+            defaultSkin = new Image(ImageIO.read(getClass().getResourceAsStream("/char.png")));
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException("Cannot load default skin");
@@ -43,12 +43,12 @@ public class SkinRepository {
         skins = Caffeine.newBuilder()
             .maximumSize(config.cacheSize)
             .expireAfterAccess(config.cacheExpireMinutes, TimeUnit.MINUTES)
-            .build(username -> new ImageContainer(this.fetch(skinPath + username + ".png")));
+            .build(username -> new ImageContainer(this.fetch(skinPath.replace("{username}", username))));
         
         capes = Caffeine.newBuilder()
             .maximumSize(config.cacheSize)
             .expireAfterAccess(config.cacheExpireMinutes, TimeUnit.MINUTES)
-            .build(username -> new ImageContainer(this.fetch(capePath + username + ".png")));
+            .build(username -> new ImageContainer(this.fetch(capePath.replace("{username}", username))));
         
         ImageIO.setUseCache(false);
     }
