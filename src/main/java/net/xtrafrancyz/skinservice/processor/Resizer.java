@@ -13,6 +13,8 @@ public class Resizer {
     
     public static Image getSkin(String username, boolean orDefault, int width, int height) {
         Image skin = SkinService.instance().skinRepository.getSkin(username, orDefault);
+        if (skin == null)
+            return null;
         if (width == skin.getWidth() && height == skin.getHeight())
             return skin;
         
