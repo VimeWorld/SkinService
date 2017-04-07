@@ -1,12 +1,16 @@
 package net.xtrafrancyz.skinservice.processor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.xtrafrancyz.skinservice.SkinService;
-import net.xtrafrancyz.skinservice.util.Log;
 
 /**
  * @author xtrafrancyz
  */
 public class Resizer {
+    private static final Logger LOG = LoggerFactory.getLogger(Resizer.class);
+    
     public static Image getSkin(String username, boolean orDefault, int width, int height) {
         Image skin = SkinService.instance().skinRepository.getSkin(username, orDefault);
         if (width == skin.getWidth() && height == skin.getHeight())
@@ -19,7 +23,7 @@ public class Resizer {
                 return result;
             }
         }
-        Log.warning("Can't transform skin of user '" + username + "' from " + skin.getWidth() + "x" + skin.getHeight() + " to " + width + "x" + height);
+        LOG.warn("Can't transform skin of user '{}' from {}x{} to {}x{}", username, skin.getWidth(), skin.getHeight(), width, height);
         return skin;
     }
     
@@ -43,7 +47,7 @@ public class Resizer {
                 return result;
             }
         }
-        Log.warning("Can't transform cape of user '" + username + "' from " + cape.getWidth() + "x" + cape.getHeight() + " to " + width + "x" + height);
+        LOG.warn("Can't transform cape of user '{}' from {}x{} to {}x{}", username, cape.getWidth(), cape.getHeight(), width, height);
         return cape;
     }
 }

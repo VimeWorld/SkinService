@@ -1,25 +1,28 @@
 package net.xtrafrancyz.skinservice;
 
+import ch.qos.logback.classic.Level;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ro.pippo.core.Pippo;
+import ro.pippo.core.RuntimeMode;
 import ro.pippo.undertow.UndertowServer;
 
 import net.xtrafrancyz.skinservice.pippo.SkinApplication;
 import net.xtrafrancyz.skinservice.repository.SkinRepository;
-import net.xtrafrancyz.skinservice.util.Log;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 
 /**
  * @author xtrafrancyz
  */
 public class SkinService {
+    private static final Logger LOG = LoggerFactory.getLogger(SkinService.class);
     private static SkinService instance;
     
     public final Gson gson = new GsonBuilder().create();
@@ -28,6 +31,9 @@ public class SkinService {
     public SkinRepository skinRepository;
     
     private SkinService() throws IOException {
+        if (RuntimeMode.getCurrent() == RuntimeMode.DEV)
+            ((ch.qos.logback.classic.Logger) LoggerFactory.getLogger("net.xtrafrancyz.skinservice")).setLevel(Level.TRACE);
+        
         readConfig();
         skinRepository = new SkinRepository(this);
         
@@ -38,7 +44,7 @@ public class SkinService {
         pippo.getServer().getSettings().port(config.port);
         pippo.start();
         
-        System.out.println("Listening at: http://" + config.host + ":" + config.port);
+        LOG.info("Listening at: http://{}:{}", config.host, config.port);
     }
     
     public void readConfig() throws IOException {
@@ -50,7 +56,7 @@ public class SkinService {
             writer.setHtmlSafe(false);
             gson.toJson(config, Config.class, writer);
             writer.close();
-            Log.info("Created config.json");
+            LOG.info("Created config.json");
         } else {
             this.config = gson.fromJson(
                 Files.readAllLines(confFile.toPath()).stream()
@@ -63,8 +69,12 @@ public class SkinService {
         }
     }
     
-    public static void main(String[] args) throws Exception {
-        instance = new SkinService();
+    public static void main(String[] args) {
+        try {
+            instance = new SkinService();
+        } catch (Exception ex) {
+            LOG.error("Application cannot be started", ex);
+        }
     }
     
     public static SkinService instance() {

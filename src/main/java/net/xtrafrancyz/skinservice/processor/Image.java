@@ -1,6 +1,10 @@
 package net.xtrafrancyz.skinservice.processor;
 
 import com.objectplanet.image.PngEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.xtrafrancyz.skinservice.SkinService;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -11,7 +15,8 @@ import java.io.IOException;
  * @author xtrafrancyz
  */
 public class Image {
-    public static final int DEFAULT_IMAGE_TYPE = BufferedImage.TYPE_INT_ARGB;
+    private static final Logger LOG = LoggerFactory.getLogger(SkinService.class);
+    private static final int DEFAULT_IMAGE_TYPE = BufferedImage.TYPE_INT_ARGB;
     private static final ThreadLocal<PngEncoder> PNG_ENCODER = ThreadLocal.withInitial(() ->
         new PngEncoder(PngEncoder.COLOR_TRUECOLOR_ALPHA, PngEncoder.BEST_SPEED)
     );
@@ -23,6 +28,7 @@ public class Image {
     
     public Image(BufferedImage handle) {
         if (handle.getType() != DEFAULT_IMAGE_TYPE) {
+            LOG.trace("Convert image to correct image type {} -> {}", handle.getType(), DEFAULT_IMAGE_TYPE);
             this.handle = new BufferedImage(handle.getWidth(), handle.getHeight(), DEFAULT_IMAGE_TYPE);
             this.handle.getGraphics().drawImage(handle, 0, 0, null);
         } else {
@@ -39,6 +45,7 @@ public class Image {
     }
     
     public void copyFrom(Image from, int fromX1, int fromY1, int fromX2, int fromY2, int toX1, int toY1) {
+        dirty = true;
         int w = fromX2 - fromX1;
         int h = fromY2 - fromY1;
         int[] selfData = getData();
@@ -57,6 +64,7 @@ public class Image {
     }
     
     public void copyWithAlphaFrom(Image from, int fromX1, int fromY1, int fromX2, int fromY2, int toX1, int toY1) {
+        dirty = true;
         int w = fromX2 - fromX1;
         int h = fromY2 - fromY1;
         int[] selfData = getData();
@@ -73,6 +81,7 @@ public class Image {
     }
     
     public void copyFlippedXFrom(Image from, int fromX1, int fromY1, int fromX2, int fromY2, int toX1, int toY1) {
+        dirty = true;
         int w = fromX2 - fromX1;
         int h = fromY2 - fromY1;
         int[] selfData = getData();
@@ -112,18 +121,17 @@ public class Image {
         return handle.getHeight();
     }
     
-    public BufferedImage getHandle() {
-        return handle;
-    }
-    
     public byte[] encode() {
         if (dirty) {
+            LOG.trace("Encoding image {}x{}", getWidth(), getHeight());
             ByteArrayOutputStream stream = new ByteArrayOutputStream(1024);
             try {
                 PNG_ENCODER.get().encode(handle, stream);
             } catch (IOException ignored) {}
             encoded = stream.toByteArray();
             dirty = false;
+        } else {
+            LOG.trace("Image already encoded. Cache used");
         }
         return encoded;
     }

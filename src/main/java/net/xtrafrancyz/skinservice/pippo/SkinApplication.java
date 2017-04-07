@@ -1,5 +1,7 @@
 package net.xtrafrancyz.skinservice.pippo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ro.pippo.core.Application;
 import ro.pippo.core.route.RouteContext;
 
@@ -8,7 +10,6 @@ import net.xtrafrancyz.skinservice.processor.Humanizer;
 import net.xtrafrancyz.skinservice.processor.Image;
 import net.xtrafrancyz.skinservice.processor.Resizer;
 import net.xtrafrancyz.skinservice.util.CloudflareUtil;
-import net.xtrafrancyz.skinservice.util.Log;
 
 import java.io.IOException;
 
@@ -16,8 +17,11 @@ import java.io.IOException;
  * @author xtrafrancyz
  */
 public class SkinApplication extends Application {
+    private static final Logger LOG = LoggerFactory.getLogger(SkinApplication.class);
+    
     public SkinApplication(SkinService service) {
-        if (service.config.debug) {
+        boolean detailed = service.config.logDetailedQueries;
+        if (detailed) {
             ALL(".*", context -> {
                 context.setLocal("_start", System.nanoTime());
                 context.next();
@@ -87,8 +91,8 @@ public class SkinApplication extends Application {
             String username = context.getParameter("username").toString();
             writeImage(context, Resizer.getCape(username, 64, 32));
         });
-    
-    
+        
+        
         // ### /raw
         GET("/raw/cape/{username: [a-zA-z0-9_]+}\\.png", context -> {
             String username = context.getParameter("username").toString();
@@ -140,16 +144,16 @@ public class SkinApplication extends Application {
         });
         
         ALL(".*", context -> {
-            if (service.config.debug) {
+            if (detailed) {
                 String ip = context.getHeader("CF-Connecting-IP");
                 if (ip == null)
                     ip = context.getHeader("X-Forwarded-For");
                 if (ip == null)
                     ip = context.getRequest().getClientIp();
                 long start = context.getLocal("_start");
-                Log.info("[" + Math.round((System.nanoTime() - start) / 10000f) / 100f + " ms] " + context.getRequestMethod() + " " + context.getRequestUri() + " (" + ip + ")");
+                LOG.info("[{} ms] {} {} ({})", Math.round((System.nanoTime() - start) / 10000f) / 100f, context.getRequestMethod(), context.getRequestUri(), ip);
             } else {
-                Log.info(context.getRequestMethod() + " " + context.getRequestUri());
+                LOG.info("{} {}", context.getRequestMethod(), context.getRequestUri());
             }
             context.next();
         }).runAsFinally();

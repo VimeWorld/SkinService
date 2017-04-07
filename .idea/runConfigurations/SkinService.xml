@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="SkinService" type="Application" factoryName="Application" singleton="true">
     <option name="MAIN_CLASS_NAME" value="net.xtrafrancyz.skinservice.SkinService" />
-    <option name="VM_PARAMETERS" value="-server -Xms256M -Xmx512M" />
+    <option name="VM_PARAMETERS" value="-server -Xms256M -Xmx512M -Dpippo.mode=dev" />
     <option name="PROGRAM_PARAMETERS" value="" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />

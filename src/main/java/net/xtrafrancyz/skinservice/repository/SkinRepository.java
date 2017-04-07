@@ -2,11 +2,12 @@ package net.xtrafrancyz.skinservice.repository;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.xtrafrancyz.skinservice.Config;
 import net.xtrafrancyz.skinservice.SkinService;
 import net.xtrafrancyz.skinservice.processor.Image;
-import net.xtrafrancyz.skinservice.util.Log;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -18,6 +19,8 @@ import java.util.concurrent.TimeUnit;
  * @author xtrafrancyz
  */
 public class SkinRepository {
+    private static final Logger LOG = LoggerFactory.getLogger(SkinRepository.class);
+    
     private LoadingCache<String, ImageContainer> skins;
     private LoadingCache<String, ImageContainer> capes;
     
@@ -36,8 +39,7 @@ public class SkinRepository {
         try {
             defaultSkin = new Image(ImageIO.read(getClass().getResourceAsStream("/char.png")));
         } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new RuntimeException("Cannot load default skin");
+            throw new RuntimeException("Can't load default skin /char.png", ex);
         }
         
         skins = Caffeine.newBuilder()
@@ -66,24 +68,26 @@ public class SkinRepository {
     }
     
     public void invalidateCape(String username) {
+        LOG.trace("Cape of player {} purged", username);
         capes.invalidate(username);
     }
     
     public void invalidateSkin(String username) {
+        LOG.trace("Skin of player {} purged", username);
         skins.invalidate(username);
     }
     
     private Image fetch(String path) {
         BufferedImage img = null;
         try {
-            if (access == Access.URL)
+            if (access == Access.URL) {
+                LOG.debug("Read image from url: {}", path);
                 img = ImageIO.read(new URL(path));
-            else if (access == Access.FILE)
+            } else if (access == Access.FILE) {
+                LOG.debug("Read image from file: {}", path);
                 img = ImageIO.read(new File(path));
+            }
         } catch (Exception ignored) {}
-        
-        if (SkinService.instance().config.debug)
-            Log.info("Fetched: " + path);
         
         if (img == null)
             return null;

@@ -1,7 +1,7 @@
 {
   "host": "127.0.0.1",
   "port": 991,
-  "debug": true,
+  "log-detailed-queries": true,
   "tokens": [
     "AuThToKeN"
   ],
