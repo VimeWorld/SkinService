@@ -43,19 +43,16 @@ public class Humanizer {
         // Left arm
         img.copyFrom(skin, 44, 20, 48, 32, 0, 8);
         // Right arm
+        img.copyFlippedXFrom(skin, 44, 20, 48, 32, 12, 8);
         if (skin.getHeight() == 64)
-            img.copyFrom(skin, 36, 52, 40, 64, 12, 8);
-        else
-            img.copyFlippedXFrom(skin, 44, 20, 48, 32, 12, 8);
+            img.copyWithAlphaFrom(skin, 36, 52, 40, 64, 12, 8);
         
         // Left leg
         img.copyFrom(skin, 4, 20, 8, 32, 4, 20);
         // Right leg
+        img.copyFlippedXFrom(skin, 4, 20, 8, 32, 8, 20);
         if (skin.getHeight() == 64)
-            img.copyFrom(skin, 20, 52, 24, 64, 8, 20);
-        else
-            img.copyFlippedXFrom(skin, 4, 20, 8, 32, 8, 20);
-        
+            img.copyWithAlphaFrom(skin, 20, 52, 24, 64, 8, 20);
         
         return img.scale(size, size * 2);
     }

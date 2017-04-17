@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ro.pippo.core.Application;
 import ro.pippo.core.route.RouteContext;
+import ro.pippo.core.route.RouteGroup;
 
 import net.xtrafrancyz.skinservice.SkinService;
 import net.xtrafrancyz.skinservice.processor.Humanizer;
@@ -12,6 +13,7 @@ import net.xtrafrancyz.skinservice.processor.Resizer;
 import net.xtrafrancyz.skinservice.util.CloudflareUtil;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 /**
  * @author xtrafrancyz
@@ -72,76 +74,76 @@ public class SkinApplication extends Application {
         
         
         // ### /game
-        GET("/game/v1/skin/{username: [a-zA-z0-9_-]+}\\.png", context -> {
-            String username = context.getParameter("username").toString();
-            writeImage(context, Resizer.getSkin(username, false, 64, 32));
-        });
-        
-        GET("/game/v1/cape/{username: [a-zA-z0-9_-]+}\\.png", context -> {
-            String username = context.getParameter("username").toString();
-            writeImage(context, Resizer.getCape(username, 22, 17));
-        });
-        
-        GET("/game/v2/skin/{username: [a-zA-z0-9_-]+}\\.png", context -> {
-            String username = context.getParameter("username").toString();
-            writeImage(context, service.skinRepository.getSkin(username, false));
-        });
-        
-        GET("/game/v2/cape/{username: [a-zA-z0-9_-]+}\\.png", context -> {
-            String username = context.getParameter("username").toString();
-            writeImage(context, Resizer.getCape(username, 64, 32));
+        addRouteGroup("/game", group -> {
+            group.GET("/v1/skin/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+                String username = context.getParameter("username").toString();
+                writeImage(context, Resizer.getSkin(username, false, 64, 32));
+            });
+            group.GET("/v1/cape/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+                String username = context.getParameter("username").toString();
+                writeImage(context, Resizer.getCape(username, 22, 17));
+            });
+            group.GET("/v2/skin/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+                String username = context.getParameter("username").toString();
+                writeImage(context, service.skinRepository.getSkin(username, false));
+            });
+            group.GET("/v2/cape/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+                String username = context.getParameter("username").toString();
+                writeImage(context, Resizer.getCape(username, 64, 32));
+            });
         });
         
         
         // ### /raw
-        GET("/raw/cape/{username: [a-zA-z0-9_-]+}\\.png", context -> {
-            String username = context.getParameter("username").toString();
-            writeImage(context, service.skinRepository.getCape(username));
-        });
-        GET("/raw/skin/{username: [a-zA-z0-9_-]+}\\.png", context -> {
-            String username = context.getParameter("username").toString();
-            writeImage(context, service.skinRepository.getSkin(username, false));
-        });
-        
-        
-        // ### /private/0 auth
-        ALL("/private/{token}/.*", context -> {
-            String token = context.getParameter("token").toString();
-            if (service.config.tokens.contains(token)) {
-                context.next();
-            } else {
-                context.status(403);
-                context.send("Invalid token");
-            }
+        addRouteGroup("/raw", group -> {
+            group.GET("/cape/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+                String username = context.getParameter("username").toString();
+                writeImage(context, service.skinRepository.getCape(username));
+            });
+            group.GET("/skin/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+                String username = context.getParameter("username").toString();
+                writeImage(context, service.skinRepository.getSkin(username, false));
+            });
         });
         
-        // ### /private/0/cache/cape
-        DELETE("/private/{token}/cache/cape/{username: [a-zA-z0-9_-]+}", context -> {
-            String username = context.getParameter("username").toString();
-            service.skinRepository.invalidateCape(username);
-            CloudflareUtil.clearCache(
-                "/game/v1/cape/" + username + ".png",
-                "/game/v2/cape/" + username + ".png",
-                "/cape/" + username + ".png"
-            );
-            context.status(200);
-            context.send("OK");
+        
+        // ### /private
+        addRouteGroup("/private", group -> {
+            group.ALL("/{token}/.*", context -> {
+                String token = context.getParameter("token").toString();
+                if (service.config.tokens.contains(token)) {
+                    context.next();
+                } else {
+                    context.status(403);
+                    context.send("Invalid token");
+                }
+            });
+            group.DELETE("/{token}/cache/cape/{username: [a-zA-z0-9_-]+}", context -> {
+                String username = context.getParameter("username").toString();
+                service.skinRepository.invalidateCape(username);
+                CloudflareUtil.clearCache(
+                    "/game/v1/cape/" + username + ".png",
+                    "/game/v2/cape/" + username + ".png",
+                    "/cape/" + username + ".png"
+                );
+                context.status(200);
+                context.send("OK");
+            });
+            group.DELETE("/{token}/cache/skin/{username: [a-zA-z0-9_-]+}", context -> {
+                String username = context.getParameter("username").toString();
+                service.skinRepository.invalidateSkin(username);
+                CloudflareUtil.clearCache(
+                    "/game/v1/skin/" + username + ".png",
+                    "/game/v2/skin/" + username + ".png",
+                    "/helm/" + username + ".png",
+                    "/head/" + username + ".png",
+                    "/body/" + username + ".png"
+                );
+                context.status(200);
+                context.send("OK");
+            });
         });
         
-        // ### /private/0/cache/skin
-        DELETE("/private/{token}/cache/skin/{username: [a-zA-z0-9_-]+}", context -> {
-            String username = context.getParameter("username").toString();
-            service.skinRepository.invalidateSkin(username);
-            CloudflareUtil.clearCache(
-                "/game/v1/skin/" + username + ".png",
-                "/game/v2/skin/" + username + ".png",
-                "/helm/" + username + ".png",
-                "/head/" + username + ".png",
-                "/body/" + username + ".png"
-            );
-            context.status(200);
-            context.send("OK");
-        });
         
         ALL(".*", context -> {
             if (detailed) {
@@ -174,5 +176,11 @@ public class SkinApplication extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    private void addRouteGroup(String pattern, Consumer<RouteGroup> filler) {
+        RouteGroup group = new RouteGroup(pattern);
+        filler.accept(group);
+        addRouteGroup(group);
     }
 }
