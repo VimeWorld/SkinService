@@ -16,5 +16,6 @@
 /out/
 
 # App
+/target/
 /logs/
 config.json
