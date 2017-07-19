@@ -52,8 +52,8 @@ public class SkinApplication extends Application {
             String username = context.getParameter("username").toString();
             writeImage(context, Humanizer.helm(username, size));
         });
-        
-        
+    
+    
         // ### /body
         GET("/body/{username: [a-zA-z0-9_-]+}\\.png", context -> {
             String username = context.getParameter("username").toString();
@@ -63,6 +63,18 @@ public class SkinApplication extends Application {
             int size = context.getParameter("size").toInt(160);
             String username = context.getParameter("username").toString();
             writeImage(context, Humanizer.body(username, size));
+        });
+    
+    
+        // ### /back
+        GET("/back/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+            String username = context.getParameter("username").toString();
+            writeImage(context, Humanizer.back(username, 160));
+        });
+        GET("/back/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
+            int size = context.getParameter("size").toInt(160);
+            String username = context.getParameter("username").toString();
+            writeImage(context, Humanizer.back(username, size));
         });
         
         
