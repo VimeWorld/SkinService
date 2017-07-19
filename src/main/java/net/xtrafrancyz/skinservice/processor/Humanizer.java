@@ -37,6 +37,7 @@ public class Humanizer {
         
         // Head
         img.copyFrom(skin, 8, 8, 16, 16, 4, 0);
+        img.copyWithAlphaFrom(skin, 40, 8, 48, 16, 4, 0);
         // Torso
         img.copyFrom(skin, 20, 20, 28, 32, 4, 8);
         
