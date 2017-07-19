@@ -8,11 +8,16 @@ VimeWorld SkinService
 
 ## Публичное API ##
 #### Скин ####
-Всё тело целиком без второго слоя:
+Вид скина спереди со вторым слоем на голове:
 ```
 GET /body/{username}.png
 GET /body/{username}/{size}.png
 ```
+Вид скина сзади со вторым слоем на голове:
+```
+GET /back/{username}.png
+GET /back/{username}/{size}.png
+`````````
 Голова без второго слоя:
 ```
 GET /head/{username}.png
