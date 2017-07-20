@@ -50,11 +50,11 @@ public class Humanizer {
         img.copyFrom(skin, 4, 20, 8, 32, 4, 20);
         // Right leg
         img.copyFlippedXFrom(skin, 4, 20, 8, 32, 8, 20);
-    
+        
         if (skin.getHeight() == 64) {
             // Replace right arm texture
             img.copyWithAlphaFrom(skin, 36, 52, 40, 64, 12, 8);
-    
+            
             // Replace left arm texture
             img.copyWithAlphaFrom(skin, 20, 52, 24, 64, 8, 20);
         }
@@ -67,31 +67,31 @@ public class Humanizer {
             size = 300;
         Image skin = SkinService.instance().skinRepository.getSkin(username, true);
         Image img = new Image(16, 32);
-    
+        
         // Head
         img.copyFrom(skin, 24, 8, 32, 16, 4, 0);
         img.copyWithAlphaFrom(skin, 56, 8, 64, 16, 4, 0);
         // Torso
         img.copyFrom(skin, 32, 20, 40, 32, 4, 8);
-    
+        
         // Left arm
-        img.copyFrom(skin, 52, 20, 56, 32, 0, 8);
+        img.copyFrom(skin, 52, 20, 56, 32, 12, 8);
         // Right arm
-        img.copyFlippedXFrom(skin, 52, 20, 56, 32, 12, 8);
-    
+        img.copyFlippedXFrom(skin, 52, 20, 56, 32, 0, 8);
+        
         // Left leg
-        img.copyFrom(skin, 12, 20, 16, 32, 4, 20);
+        img.copyFrom(skin, 12, 20, 16, 32, 8, 20);
         // Right leg
-        img.copyFlippedXFrom(skin, 12, 20, 16, 32, 8, 20);
+        img.copyFlippedXFrom(skin, 12, 20, 16, 32, 4, 20);
         
         if (skin.getHeight() == 64) {
             // Replace right arm texture
-            img.copyWithAlphaFrom(skin, 44, 52, 48, 64, 12, 8);
+            img.copyWithAlphaFrom(skin, 44, 52, 48, 64, 0, 8);
             
             // Replace right leg texture
-            img.copyWithAlphaFrom(skin, 28, 52, 32, 64, 8, 20);
+            img.copyWithAlphaFrom(skin, 28, 52, 32, 64, 4, 20);
         }
-    
+        
         return img.scale(size, size * 2);
     }
     

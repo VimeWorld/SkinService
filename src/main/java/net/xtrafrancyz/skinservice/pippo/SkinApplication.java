@@ -147,9 +147,12 @@ public class SkinApplication extends Application {
                 CloudflareUtil.clearCache(
                     "/game/v1/skin/" + username + ".png",
                     "/game/v2/skin/" + username + ".png",
+                    "/raw/cape/" + username + ".png",
+                    "/raw/skin/" + username + ".png",
                     "/helm/" + username + ".png",
                     "/head/" + username + ".png",
-                    "/body/" + username + ".png"
+                    "/body/" + username + ".png",
+                    "/back/" + username + ".png"
                 );
                 context.status(200);
                 context.send("OK");
