@@ -74,8 +74,8 @@ public class Image {
         for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
                 int argb = fromData[fromX1 + x + (fromY1 + y) * fromWidth];
-                if ((argb >> 24 & 255) > 5)
-                    selfData[toX1 + x + (toY1 + y) * selfWidth] = argb;
+                int toIndex = toX1 + x + (toY1 + y) * selfWidth;
+                selfData[toIndex] = blendAlpha(selfData[toIndex], argb);
             }
         }
     }
@@ -140,5 +140,20 @@ public class Image {
         if (data == null)
             data = ((DataBufferInt) handle.getRaster().getDataBuffer()).getData();
         return data;
+    }
+    
+    /**
+     * Code from https://stackoverflow.com/a/727339/6620659
+     */
+    private static int blendAlpha(int c1, int c2) {
+        float a1 = (c1 >> 24 & 255) / 255f;
+        float a2 = (c2 >> 24 & 255) / 255f;
+        float a = 1 - (1 - a2) * (1 - a1);
+        if (a < 1.0e-6)
+            return 0x00000000;
+        float r = ((c2 >> 16 & 255) / 255f) * a2 / a + ((c1 >> 16 & 255) / 255f) * a1 * (1 - a2) / a;
+        float g = ((c2 >> 8 & 255) / 255f) * a2 / a + ((c1 >> 8 & 255) / 255f) * a1 * (1 - a2) / a;
+        float b = ((c2 & 255) / 255f) * a2 / a + ((c1 & 255) / 255f) * a1 * (1 - a2) / a;
+        return (int) (a * 255) << 24 | (int) (r * 255) << 16 | (int) (g * 255) << 8 | (int) (b * 255);
     }
 }
