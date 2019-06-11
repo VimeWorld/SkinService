@@ -27,9 +27,6 @@ public class Config {
         @SerializedName("cape-path")
         public String capePath = "http://s3.amazonaws.com/MinecraftCloaks/{username}.png";
         
-        @SerializedName("cache-size")
-        public int cacheSize = 10000;
-        
         @SerializedName("cache-expire-minutes")
         public int cacheExpireMinutes = 60;
     }

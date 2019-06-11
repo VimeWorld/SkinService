@@ -43,18 +43,19 @@ public class SkinRepository {
         }
         
         skins = Caffeine.newBuilder()
-            .maximumSize(config.cacheSize)
+            .weakValues()
             .expireAfterAccess(config.cacheExpireMinutes, TimeUnit.MINUTES)
             .build(username -> new ImageContainer(this.fetch(skinPath.replace("{username}", username))));
         
         capes = Caffeine.newBuilder()
-            .maximumSize(config.cacheSize)
+            .weakValues()
             .expireAfterAccess(config.cacheExpireMinutes, TimeUnit.MINUTES)
             .build(username -> new ImageContainer(this.fetch(capePath.replace("{username}", username))));
         
         ImageIO.setUseCache(false);
     }
     
+    @SuppressWarnings("ConstantConditions")
     public Image getSkin(String username, boolean orDefault) {
         ImageContainer img = skins.get(username);
         if (img.img == null && orDefault)
@@ -63,6 +64,7 @@ public class SkinRepository {
             return img.img;
     }
     
+    @SuppressWarnings("ConstantConditions")
     public Image getCape(String username) {
         return capes.get(username).img;
     }
