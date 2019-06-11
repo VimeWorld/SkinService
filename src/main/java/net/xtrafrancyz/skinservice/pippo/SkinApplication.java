@@ -24,7 +24,7 @@ public class SkinApplication extends Application {
     public SkinApplication(SkinService service) {
         boolean detailed = service.config.logDetailedQueries;
         if (detailed) {
-            ALL(".*", context -> {
+            ANY(".*", context -> {
                 context.setLocal("_start", System.nanoTime());
                 context.next();
             });
@@ -121,7 +121,7 @@ public class SkinApplication extends Application {
         
         // ### /private
         addRouteGroup("/private", group -> {
-            group.ALL("/{token}/.*", context -> {
+            group.ANY("/{token}/.*", context -> {
                 String token = context.getParameter("token").toString();
                 if (service.config.tokens.contains(token)) {
                     context.next();
@@ -160,7 +160,7 @@ public class SkinApplication extends Application {
         });
         
         
-        ALL(".*", context -> {
+        ANY(".*", context -> {
             if (detailed) {
                 String ip = context.getHeader("CF-Connecting-IP");
                 if (ip == null)
