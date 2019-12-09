@@ -2,15 +2,21 @@ package net.xtrafrancyz.skinservice.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.xtrafrancyz.skinservice.Config;
 import net.xtrafrancyz.skinservice.SkinService;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,6 +25,7 @@ import java.util.concurrent.Executors;
  */
 public class CloudflareUtil {
     private static final ExecutorService executor = Executors.newCachedThreadPool();
+    private static final Logger log = LoggerFactory.getLogger(CloudflareUtil.class);
     
     public static void clearCache(String... urls) {
         Config.CloudflareConfig config = SkinService.instance().config.cloudflare;
@@ -35,10 +42,9 @@ public class CloudflareUtil {
             HttpURLConnection conn = null;
             try {
                 conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("DELETE");
+                conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
-                conn.setRequestProperty("X-Auth-Email", config.email);
-                conn.setRequestProperty("X-Auth-Key", config.key);
+                conn.setRequestProperty("Authorization", "Bearer " + config.key);
                 
                 conn.setDoOutput(true);
                 OutputStream out = conn.getOutputStream();
@@ -54,7 +60,19 @@ public class CloudflareUtil {
                 out.flush();
                 out.close();
                 
-                conn.getResponseCode();
+                int code = conn.getResponseCode();
+                if (code / 100 != 2) {
+                    InputStream is = code >= 400 ? conn.getErrorStream() : conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+                    String line;
+                    StringBuilder sb = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        if (sb.length() > 0)
+                            sb.append(System.getProperty("line.separator"));
+                        sb.append(line);
+                    }
+                    log.warn("Error from Cloudflare (" + code + "): " + sb);
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             } finally {

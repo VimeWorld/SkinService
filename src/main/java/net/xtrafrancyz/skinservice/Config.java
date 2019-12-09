@@ -18,7 +18,7 @@ public class Config {
     public RepositoryConfig repository = new RepositoryConfig();
     public CloudflareConfig cloudflare = new CloudflareConfig();
     
-    public class RepositoryConfig {
+    public static class RepositoryConfig {
         public String type = "URL";
         
         @SerializedName("skin-path")
@@ -31,16 +31,13 @@ public class Config {
         public int cacheExpireMinutes = 60;
     }
     
-    public class CloudflareConfig {
+    public static class CloudflareConfig {
         public boolean enabled = false;
         
         @SerializedName("zone-id")
         public String zoneId = "";
         
-        @SerializedName("auth-email")
-        public String email = "";
-        
-        @SerializedName("auth-key")
+        @SerializedName("api-key")
         public String key = "";
         
         @SerializedName("cache-url")
