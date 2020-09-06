@@ -17,7 +17,7 @@ GET /body/{username}/{size}.png
 ```
 GET /back/{username}.png
 GET /back/{username}/{size}.png
-`````````
+```
 Голова без второго слоя:
 ```
 GET /head/{username}.png
@@ -27,6 +27,16 @@ GET /head/{username}/{size}.png
 ```
 GET /helm/{username}.png
 GET /helm/{username}/{size}.png
+```
+Изометрическая голова:
+```
+GET /head/3d/{username}.png
+GET /head/3d/{username}/{size}.png
+```
+Изометрическая голова со шлемом:
+```
+GET /helm/3d/{username}.png
+GET /helm/3d/{username}/{size}.png
 ```
 Оригинальный скин:
 ```

@@ -9,6 +9,7 @@ import ro.pippo.core.route.RouteGroup;
 import net.xtrafrancyz.skinservice.SkinService;
 import net.xtrafrancyz.skinservice.processor.Humanizer;
 import net.xtrafrancyz.skinservice.processor.Image;
+import net.xtrafrancyz.skinservice.processor.Perspective;
 import net.xtrafrancyz.skinservice.processor.Resizer;
 import net.xtrafrancyz.skinservice.util.CloudflareUtil;
 
@@ -40,6 +41,15 @@ public class SkinApplication extends Application {
             String username = context.getParameter("username").toString();
             writeImage(context, Humanizer.head(username, size));
         });
+        GET("/head/3d/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+            String username = context.getParameter("username").toString();
+            writeImage(context, Perspective.head(username, 160, false));
+        });
+        GET("/head/3d/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
+            int size = context.getParameter("size").toInt(160);
+            String username = context.getParameter("username").toString();
+            writeImage(context, Perspective.head(username, size, false));
+        });
         
         
         // ### /helm
@@ -52,8 +62,17 @@ public class SkinApplication extends Application {
             String username = context.getParameter("username").toString();
             writeImage(context, Humanizer.helm(username, size));
         });
-    
-    
+        GET("/helm/3d/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+            String username = context.getParameter("username").toString();
+            writeImage(context, Perspective.head(username, 160, true));
+        });
+        GET("/helm/3d/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
+            int size = context.getParameter("size").toInt(160);
+            String username = context.getParameter("username").toString();
+            writeImage(context, Perspective.head(username, size, true));
+        });
+        
+        
         // ### /body
         GET("/body/{username: [a-zA-z0-9_-]+}\\.png", context -> {
             String username = context.getParameter("username").toString();
@@ -64,8 +83,8 @@ public class SkinApplication extends Application {
             String username = context.getParameter("username").toString();
             writeImage(context, Humanizer.body(username, size));
         });
-    
-    
+        
+        
         // ### /back
         GET("/back/{username: [a-zA-z0-9_-]+}\\.png", context -> {
             String username = context.getParameter("username").toString();

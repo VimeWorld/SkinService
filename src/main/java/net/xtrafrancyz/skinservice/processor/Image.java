@@ -142,6 +142,10 @@ public class Image {
         return data;
     }
     
+    public BufferedImage getHandle() {
+        return handle;
+    }
+    
     /**
      * Code from https://stackoverflow.com/a/727339/6620659
      */
