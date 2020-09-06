@@ -9,10 +9,7 @@ import net.xtrafrancyz.skinservice.Config;
 import net.xtrafrancyz.skinservice.SkinService;
 import net.xtrafrancyz.skinservice.processor.Image;
 
-import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
@@ -31,8 +28,6 @@ public class SkinRepository {
     private String skinPath;
     private String capePath;
     private Image defaultSkin;
-    
-    private ImageReader pngReader;
     
     public SkinRepository(SkinService service) {
         Config.RepositoryConfig config = service.config.repository;
@@ -58,8 +53,6 @@ public class SkinRepository {
             .build(username -> new ImageContainer(this.fetch(capePath.replace("{username}", username))));
         
         ImageIO.setUseCache(false);
-        
-        pngReader = ImageIO.getImageReadersByFormatName("png").next();
     }
     
     @SuppressWarnings("ConstantConditions")
@@ -94,12 +87,7 @@ public class SkinRepository {
                 img = ImageIO.read(new URL(path));
             } else if (access == Access.FILE) {
                 LOG.debug("Read image from file: {}", path);
-                try (ImageInputStream stream = ImageIO.createImageInputStream(new File(path))) {
-                    pngReader.setInput(stream);
-                    IIOImage image = pngReader.readAll(0, pngReader.getDefaultReadParam());
-                    img = (BufferedImage) image.getRenderedImage();
-                }
-                pngReader.reset();
+                img = ImageIO.read(new File(path));
             }
         } catch (Exception ignored) {}
         
