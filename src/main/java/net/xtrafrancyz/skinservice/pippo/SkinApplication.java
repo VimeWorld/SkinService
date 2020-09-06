@@ -170,6 +170,8 @@ public class SkinApplication extends Application {
                     "/raw/skin/" + username + ".png",
                     "/helm/" + username + ".png",
                     "/head/" + username + ".png",
+                    "/helm/3d/" + username + ".png",
+                    "/head/3d/" + username + ".png",
                     "/body/" + username + ".png",
                     "/back/" + username + ".png"
                 );
