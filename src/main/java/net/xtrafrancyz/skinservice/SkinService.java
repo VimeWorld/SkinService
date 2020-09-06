@@ -61,7 +61,7 @@ public class SkinService {
             this.config = gson.fromJson(
                 Files.readAllLines(confFile.toPath()).stream()
                     .map(String::trim)
-                    .filter(s -> !s.startsWith("#") && !s.isEmpty())
+                    .filter(s -> !s.startsWith("#") && !s.startsWith("//") && !s.isEmpty())
                     .reduce((a, b) -> a += b)
                     .orElse(""),
                 Config.class
