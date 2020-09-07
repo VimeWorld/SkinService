@@ -42,7 +42,7 @@ public class Perspective {
             // helm left
             transform.setToIdentity();
             transform.scale(scale * 1.1, scale * 1.1);
-            transform.translate(17.58, 3.54);
+            transform.translate(17.57, 3.55);
             transform.shear(0, 0.5);
             transform.scale(-1.06, 1.29);
             graphics.drawImage(darken(skin.getHandle().getSubimage(48, 8, 8, 8)), transform, null);
@@ -51,7 +51,7 @@ public class Perspective {
         // front
         transform.setToIdentity();
         transform.scale(scale, scale);
-        transform.translate(10, 8.68);
+        transform.translate(9.99, 8.68);
         transform.shear(0, -0.5);
         transform.scale(1.06, 1.29);
         graphics.drawImage(lighten(skin.getHandle().getSubimage(8, 8, 8, 8)), transform, null);
@@ -76,7 +76,7 @@ public class Perspective {
             // helm front
             transform.setToIdentity();
             transform.scale(scale * 1.1, scale * 1.1);
-            transform.translate(10 + helmOffsetX, 8.68 + helmOffsetY);
+            transform.translate(9.99 + helmOffsetX, 8.68 + helmOffsetY);
             transform.shear(0, -0.5);
             transform.scale(1.06, 1.29);
             graphics.drawImage(lighten(skin.getHandle().getSubimage(40, 8, 8, 8)), transform, null);
