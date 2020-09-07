@@ -32,44 +32,48 @@ public class SkinApplication extends Application {
         }
         
         // ### /head
-        GET("/head/{username: [a-zA-z0-9_-]+}\\.png", context -> {
-            String username = context.getParameter("username").toString();
-            writeImage(context, Humanizer.head(username, 160));
-        });
-        GET("/head/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
-            int size = context.getParameter("size").toInt(160);
-            String username = context.getParameter("username").toString();
-            writeImage(context, Humanizer.head(username, size));
-        });
-        GET("/head/3d/{username: [a-zA-z0-9_-]+}\\.png", context -> {
-            String username = context.getParameter("username").toString();
-            writeImage(context, Perspective.head(username, 160, false));
-        });
-        GET("/head/3d/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
-            int size = context.getParameter("size").toInt(160);
-            String username = context.getParameter("username").toString();
-            writeImage(context, Perspective.head(username, size, false));
+        addRouteGroup("/head", group -> {
+            group.GET("/3d/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+                String username = context.getParameter("username").toString();
+                writeImage(context, Perspective.head(username, 160, false));
+            });
+            group.GET("/3d/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
+                int size = context.getParameter("size").toInt(160);
+                String username = context.getParameter("username").toString();
+                writeImage(context, Perspective.head(username, size, false));
+            });
+            group.GET("/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+                String username = context.getParameter("username").toString();
+                writeImage(context, Humanizer.head(username, 160));
+            });
+            group.GET("/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
+                int size = context.getParameter("size").toInt(160);
+                String username = context.getParameter("username").toString();
+                writeImage(context, Humanizer.head(username, size));
+            });
         });
         
         
         // ### /helm
-        GET("/helm/{username: [a-zA-z0-9_-]+}\\.png", context -> {
-            String username = context.getParameter("username").toString();
-            writeImage(context, Humanizer.helm(username, 160));
-        });
-        GET("/helm/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
-            int size = context.getParameter("size").toInt(160);
-            String username = context.getParameter("username").toString();
-            writeImage(context, Humanizer.helm(username, size));
-        });
-        GET("/helm/3d/{username: [a-zA-z0-9_-]+}\\.png", context -> {
-            String username = context.getParameter("username").toString();
-            writeImage(context, Perspective.head(username, 160, true));
-        });
-        GET("/helm/3d/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
-            int size = context.getParameter("size").toInt(160);
-            String username = context.getParameter("username").toString();
-            writeImage(context, Perspective.head(username, size, true));
+        addRouteGroup("/helm", group -> {
+            group.GET("/3d/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+                String username = context.getParameter("username").toString();
+                writeImage(context, Perspective.head(username, 160, true));
+            });
+            group.GET("/3d/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
+                int size = context.getParameter("size").toInt(160);
+                String username = context.getParameter("username").toString();
+                writeImage(context, Perspective.head(username, size, true));
+            });
+            group.GET("/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+                String username = context.getParameter("username").toString();
+                writeImage(context, Humanizer.helm(username, 160));
+            });
+            group.GET("/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
+                int size = context.getParameter("size").toInt(160);
+                String username = context.getParameter("username").toString();
+                writeImage(context, Humanizer.helm(username, size));
+            });
         });
         
         
