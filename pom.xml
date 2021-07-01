@@ -48,9 +48,8 @@
 
     <repositories>
         <repository>
-            <id>repo.xtrafrancyz.net</id>
-            <name>xtrafrancyz's public repo</name>
-            <url>http://repo.xtrafrancyz.net/libs-release</url>
+            <id>local-maven-repo</id>
+            <url>file:///${project.basedir}/lib</url>
         </repository>
     </repositories>
 
