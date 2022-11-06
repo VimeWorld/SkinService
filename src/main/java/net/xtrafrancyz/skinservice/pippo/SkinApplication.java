@@ -24,7 +24,8 @@ public class SkinApplication extends Application {
     
     public SkinApplication(SkinService service) {
         boolean detailed = service.config.logDetailedQueries;
-        if (detailed) {
+        boolean log = service.config.logHttp;
+        if (log && detailed) {
             ANY(".*", context -> {
                 context.setLocal("_start", System.nanoTime());
                 context.next();
@@ -184,21 +185,22 @@ public class SkinApplication extends Application {
             });
         });
         
-        
-        ANY(".*", context -> {
-            if (detailed) {
-                String ip = context.getHeader("CF-Connecting-IP");
-                if (ip == null)
-                    ip = context.getHeader("X-Forwarded-For");
-                if (ip == null)
-                    ip = context.getRequest().getClientIp();
-                long start = context.getLocal("_start");
-                LOG.info("[{} ms] {} {} ({})", Math.round((System.nanoTime() - start) / 10000f) / 100f, context.getRequestMethod(), context.getRequestUri(), ip);
-            } else {
-                LOG.info("{} {}", context.getRequestMethod(), context.getRequestUri());
-            }
-            context.next();
-        }).runAsFinally();
+        if (log) {
+            ANY(".*", context -> {
+                if (detailed) {
+                    String ip = context.getHeader("CF-Connecting-IP");
+                    if (ip == null)
+                        ip = context.getHeader("X-Forwarded-For");
+                    if (ip == null)
+                        ip = context.getRequest().getClientIp();
+                    long start = context.getLocal("_start");
+                    LOG.info("[{} ms] {} {} ({})", Math.round((System.nanoTime() - start) / 10000f) / 100f, context.getRequestMethod(), context.getRequestUri(), ip);
+                } else {
+                    LOG.info("{} {}", context.getRequestMethod(), context.getRequestUri());
+                }
+                context.next();
+            }).runAsFinally();
+        }
         
         setErrorHandler(new SkinErrorHandler(this));
     }

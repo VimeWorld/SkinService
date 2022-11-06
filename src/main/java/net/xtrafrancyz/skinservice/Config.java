@@ -11,6 +11,8 @@ import java.util.Set;
 public class Config {
     public String host = "127.0.0.1";
     public int port = 991;
+    @SerializedName("log-http")
+    public boolean logHttp = true;
     @SerializedName("log-detailed-queries")
     public boolean logDetailedQueries = true;
     public Set<String> tokens = Collections.singleton("AuThToKeN");
