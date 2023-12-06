@@ -7,8 +7,8 @@ import net.xtrafrancyz.skinservice.SkinService;
  */
 public class Humanizer {
     public static Image head(String username, int size) {
-        if (size > 300)
-            size = 300;
+        size = Math.max(8, Math.min(size, 300));
+        
         Image skin = SkinService.instance().skinRepository.getSkin(username, true);
         Image img = new Image(8, 8);
         
@@ -18,8 +18,8 @@ public class Humanizer {
     }
     
     public static Image helm(String username, int size) {
-        if (size > 300)
-            size = 300;
+        size = Math.max(8, Math.min(size, 300));
+        
         Image skin = SkinService.instance().skinRepository.getSkin(username, true);
         Image img = new Image(8, 8);
         
@@ -30,8 +30,8 @@ public class Humanizer {
     }
     
     public static Image body(String username, int size) {
-        if (size > 300)
-            size = 300;
+        size = Math.max(8, Math.min(size, 300));
+        
         Image skin = SkinService.instance().skinRepository.getSkin(username, true);
         Image img = new Image(16, 32);
         
@@ -63,8 +63,8 @@ public class Humanizer {
     }
     
     public static Image back(String username, int size) {
-        if (size > 300)
-            size = 300;
+        size = Math.max(8, Math.min(size, 300));
+        
         Image skin = SkinService.instance().skinRepository.getSkin(username, true);
         Image img = new Image(16, 32);
         

@@ -13,8 +13,7 @@ import java.awt.image.DataBufferInt;
  */
 public class Perspective {
     public static Image head(String username, int size, boolean helm) {
-        if (size > 300)
-            size = 300;
+        size = Math.max(8, Math.min(size, 300));
         
         float scale = size / 20f;
         
