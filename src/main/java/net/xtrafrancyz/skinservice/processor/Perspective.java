@@ -36,7 +36,7 @@ public class Perspective {
             transform.translate(9.1, -0.68);
             transform.shear(0, -0.5);
             transform.scale(-1.06, 1.29);
-            graphics.drawImage(darken(skin.getHandle().getSubimage(56, 8, 8, 8)), transform, null);
+            graphics.drawImage(darken(subImage(skin, transform, 56, 8, 8, 8)), transform, null);
             
             // helm left
             transform.setToIdentity();
@@ -44,7 +44,7 @@ public class Perspective {
             transform.translate(17.57, 3.55);
             transform.shear(0, 0.5);
             transform.scale(-1.06, 1.29);
-            graphics.drawImage(darken(skin.getHandle().getSubimage(48, 8, 8, 8)), transform, null);
+            graphics.drawImage(darken(subImage(skin, transform, 48, 8, 8, 8)), transform, null);
         }
         
         // front
@@ -53,7 +53,7 @@ public class Perspective {
         transform.translate(9.99, 8.68);
         transform.shear(0, -0.5);
         transform.scale(1.06, 1.29);
-        graphics.drawImage(lighten(skin.getHandle().getSubimage(8, 8, 8, 8)), transform, null);
+        graphics.drawImage(lighten(subImage(skin, transform, 8, 8, 8, 8)), transform, null);
         
         // top
         transform.setToIdentity();
@@ -61,7 +61,7 @@ public class Perspective {
         transform.translate(1.51, 4.44);
         transform.scale(1.5, 0.75);
         transform.rotate(-Math.toRadians(45));
-        graphics.drawImage(skin.getHandle().getSubimage(8, 0, 8, 8), transform, null);
+        graphics.drawImage(subImage(skin, transform, 8, 0, 8, 8), transform, null);
         
         // right
         transform.setToIdentity();
@@ -69,7 +69,7 @@ public class Perspective {
         transform.translate(1.505, 4.44);
         transform.shear(0, 0.5);
         transform.scale(1.06, 1.29);
-        graphics.drawImage(darken(skin.getHandle().getSubimage(0, 8, 8, 8)), transform, null);
+        graphics.drawImage(darken(subImage(skin, transform, 0, 8, 8, 8)), transform, null);
         
         if (helm) {
             // helm front
@@ -78,7 +78,7 @@ public class Perspective {
             transform.translate(9.99 + helmOffsetX, 8.68 + helmOffsetY);
             transform.shear(0, -0.5);
             transform.scale(1.06, 1.29);
-            graphics.drawImage(lighten(skin.getHandle().getSubimage(40, 8, 8, 8)), transform, null);
+            graphics.drawImage(lighten(subImage(skin, transform, 40, 8, 8, 8)), transform, null);
             
             // helm top
             transform.setToIdentity();
@@ -86,7 +86,7 @@ public class Perspective {
             transform.translate(1.52 + helmOffsetX, 4.46 + helmOffsetY);
             transform.scale(1.5, 0.75);
             transform.rotate(-Math.toRadians(45));
-            graphics.drawImage(skin.getHandle().getSubimage(40, 0, 8, 8), transform, null);
+            graphics.drawImage(subImage(skin, transform, 40, 0, 8, 8), transform, null);
             
             // helm right
             transform.setToIdentity();
@@ -94,7 +94,7 @@ public class Perspective {
             transform.translate(1.505 + helmOffsetX, 4.44 + helmOffsetY);
             transform.shear(0, 0.5);
             transform.scale(1.06, 1.29);
-            graphics.drawImage(darken(skin.getHandle().getSubimage(32, 8, 8, 8)), transform, null);
+            graphics.drawImage(darken(subImage(skin, transform, 32, 8, 8, 8)), transform, null);
         }
         
         return image;
@@ -134,5 +134,16 @@ public class Perspective {
         if (c < 0)
             return c;
         return Math.min(255, c);
+    }
+    
+    private static BufferedImage subImage(Image skin, AffineTransform transform, int x, int y, int w, int h) {
+        int scale = skin.getWidth() / 64;
+        x *= scale;
+        y *= scale;
+        w *= scale;
+        h *= scale;
+        if (scale != 1)
+            transform.scale(1d / scale, 1d / scale);
+        return skin.getHandle().getSubimage(x, y, w, h);
     }
 }

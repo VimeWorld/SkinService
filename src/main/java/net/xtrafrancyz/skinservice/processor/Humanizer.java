@@ -10,7 +10,7 @@ public class Humanizer {
         size = Math.max(8, Math.min(size, 300));
         
         Image skin = SkinService.instance().skinRepository.getSkin(username, true);
-        Image img = new Image(8, 8);
+        HDImage img = new HDImage(8, 8, skin);
         
         img.copyFrom(skin, 8, 8, 16, 16);
         
@@ -21,7 +21,7 @@ public class Humanizer {
         size = Math.max(8, Math.min(size, 300));
         
         Image skin = SkinService.instance().skinRepository.getSkin(username, true);
-        Image img = new Image(8, 8);
+        HDImage img = new HDImage(8, 8, skin);
         
         img.copyFrom(skin, 8, 8, 16, 16);
         img.copyWithAlphaFrom(skin, 40, 8, 48, 16);
@@ -33,7 +33,7 @@ public class Humanizer {
         size = Math.max(8, Math.min(size, 300));
         
         Image skin = SkinService.instance().skinRepository.getSkin(username, true);
-        Image img = new Image(16, 32);
+        HDImage img = new HDImage(16, 32, skin);
         
         // Head
         img.copyFrom(skin, 8, 8, 16, 16, 4, 0);
@@ -66,7 +66,7 @@ public class Humanizer {
         size = Math.max(8, Math.min(size, 300));
         
         Image skin = SkinService.instance().skinRepository.getSkin(username, true);
-        Image img = new Image(16, 32);
+        HDImage img = new HDImage(16, 32, skin);
         
         // Head
         img.copyFrom(skin, 24, 8, 32, 16, 4, 0);

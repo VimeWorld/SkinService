@@ -9,8 +9,5 @@
         <module name="SkinService" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="SkinService" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
