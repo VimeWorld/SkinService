@@ -13,9 +13,11 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,6 +28,13 @@ import java.util.concurrent.Executors;
 public class CloudflareUtil {
     private static final ExecutorService executor = Executors.newCachedThreadPool();
     private static final Logger log = LoggerFactory.getLogger(CloudflareUtil.class);
+    
+    public static String urlencode(String str) {
+        try {
+            return URLEncoder.encode(str, "UTF-8");
+        } catch (UnsupportedEncodingException ignored) {}
+        return str;
+    }
     
     public static void clearCache(String... urls) {
         Config.CloudflareConfig config = SkinService.instance().config.cloudflare;
@@ -68,7 +77,7 @@ public class CloudflareUtil {
                     StringBuilder sb = new StringBuilder();
                     while ((line = reader.readLine()) != null) {
                         if (sb.length() > 0)
-                            sb.append(System.getProperty("line.separator"));
+                            sb.append(System.lineSeparator());
                         sb.append(line);
                     }
                     log.warn("Error from Cloudflare (" + code + "): " + sb);

@@ -22,6 +22,8 @@ import java.util.function.Consumer;
 public class SkinApplication extends Application {
     private static final Logger LOG = LoggerFactory.getLogger(SkinApplication.class);
     
+    private static final String USERNAME = "{username: [a-zA-Zа-яА-ЯІіЇїЄєЁё0-9_-]+}";
+    
     public SkinApplication(SkinService service) {
         boolean detailed = service.config.logDetailedQueries;
         boolean log = service.config.logHttp;
@@ -34,20 +36,20 @@ public class SkinApplication extends Application {
         
         // ### /head
         addRouteGroup("/head", group -> {
-            group.GET("/3d/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+            group.GET("/3d/" + USERNAME + "\\.png", context -> {
                 String username = context.getParameter("username").toString();
                 writeImage(context, Perspective.head(username, 160, false));
             });
-            group.GET("/3d/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
+            group.GET("/3d/" + USERNAME + "/{size: [0-9]+}\\.png", context -> {
                 int size = context.getParameter("size").toInt(160);
                 String username = context.getParameter("username").toString();
                 writeImage(context, Perspective.head(username, size, false));
             });
-            group.GET("/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+            group.GET("/" + USERNAME + "\\.png", context -> {
                 String username = context.getParameter("username").toString();
                 writeImage(context, Humanizer.head(username, 160));
             });
-            group.GET("/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
+            group.GET("/" + USERNAME + "/{size: [0-9]+}\\.png", context -> {
                 int size = context.getParameter("size").toInt(160);
                 String username = context.getParameter("username").toString();
                 writeImage(context, Humanizer.head(username, size));
@@ -57,20 +59,20 @@ public class SkinApplication extends Application {
         
         // ### /helm
         addRouteGroup("/helm", group -> {
-            group.GET("/3d/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+            group.GET("/3d/" + USERNAME + "\\.png", context -> {
                 String username = context.getParameter("username").toString();
                 writeImage(context, Perspective.head(username, 160, true));
             });
-            group.GET("/3d/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
+            group.GET("/3d/" + USERNAME + "/{size: [0-9]+}\\.png", context -> {
                 int size = context.getParameter("size").toInt(160);
                 String username = context.getParameter("username").toString();
                 writeImage(context, Perspective.head(username, size, true));
             });
-            group.GET("/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+            group.GET("/" + USERNAME + "\\.png", context -> {
                 String username = context.getParameter("username").toString();
                 writeImage(context, Humanizer.helm(username, 160));
             });
-            group.GET("/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
+            group.GET("/" + USERNAME + "/{size: [0-9]+}\\.png", context -> {
                 int size = context.getParameter("size").toInt(160);
                 String username = context.getParameter("username").toString();
                 writeImage(context, Humanizer.helm(username, size));
@@ -79,11 +81,11 @@ public class SkinApplication extends Application {
         
         
         // ### /body
-        GET("/body/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+        GET("/body/" + USERNAME + "\\.png", context -> {
             String username = context.getParameter("username").toString();
             writeImage(context, Humanizer.body(username, 160));
         });
-        GET("/body/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
+        GET("/body/" + USERNAME + "/{size: [0-9]+}\\.png", context -> {
             int size = context.getParameter("size").toInt(160);
             String username = context.getParameter("username").toString();
             writeImage(context, Humanizer.body(username, size));
@@ -91,11 +93,11 @@ public class SkinApplication extends Application {
         
         
         // ### /back
-        GET("/back/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+        GET("/back/" + USERNAME + "\\.png", context -> {
             String username = context.getParameter("username").toString();
             writeImage(context, Humanizer.back(username, 160));
         });
-        GET("/back/{username: [a-zA-z0-9_-]+}/{size: [0-9]+}\\.png", context -> {
+        GET("/back/" + USERNAME + "/{size: [0-9]+}\\.png", context -> {
             int size = context.getParameter("size").toInt(160);
             String username = context.getParameter("username").toString();
             writeImage(context, Humanizer.back(username, size));
@@ -103,7 +105,7 @@ public class SkinApplication extends Application {
         
         
         // ### /cape
-        GET("/cape/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+        GET("/cape/" + USERNAME + "\\.png", context -> {
             String username = context.getParameter("username").toString();
             writeImage(context, Humanizer.cape(username));
         });
@@ -111,19 +113,19 @@ public class SkinApplication extends Application {
         
         // ### /game
         addRouteGroup("/game", group -> {
-            group.GET("/v1/skin/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+            group.GET("/v1/skin/" + USERNAME + "\\.png", context -> {
                 String username = context.getParameter("username").toString();
                 writeImage(context, Resizer.getSkin(username, false, 64, 32));
             });
-            group.GET("/v1/cape/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+            group.GET("/v1/cape/" + USERNAME + "\\.png", context -> {
                 String username = context.getParameter("username").toString();
                 writeImage(context, Resizer.getCape(username, 22, 17));
             });
-            group.GET("/v2/skin/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+            group.GET("/v2/skin/" + USERNAME + "\\.png", context -> {
                 String username = context.getParameter("username").toString();
                 writeImage(context, service.skinRepository.getSkin(username, false));
             });
-            group.GET("/v2/cape/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+            group.GET("/v2/cape/" + USERNAME + "\\.png", context -> {
                 String username = context.getParameter("username").toString();
                 writeImage(context, Resizer.getCape(username, 64, 32));
             });
@@ -132,11 +134,11 @@ public class SkinApplication extends Application {
         
         // ### /raw
         addRouteGroup("/raw", group -> {
-            group.GET("/cape/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+            group.GET("/cape/" + USERNAME + "\\.png", context -> {
                 String username = context.getParameter("username").toString();
                 writeImage(context, service.skinRepository.getCape(username));
             });
-            group.GET("/skin/{username: [a-zA-z0-9_-]+}\\.png", context -> {
+            group.GET("/skin/" + USERNAME + "\\.png", context -> {
                 String username = context.getParameter("username").toString();
                 writeImage(context, service.skinRepository.getSkin(username, false));
             });
@@ -154,9 +156,10 @@ public class SkinApplication extends Application {
                     context.send("Invalid token");
                 }
             });
-            group.DELETE("/{token}/cache/cape/{username: [a-zA-z0-9_-]+}", context -> {
+            group.DELETE("/{token}/cache/cape/" + USERNAME, context -> {
                 String username = context.getParameter("username").toString();
                 service.skinRepository.invalidateCape(username);
+                username = CloudflareUtil.urlencode(username);
                 CloudflareUtil.clearCache(
                     "/game/v1/cape/" + username + ".png",
                     "/game/v2/cape/" + username + ".png",
@@ -165,9 +168,10 @@ public class SkinApplication extends Application {
                 context.status(200);
                 context.send("OK");
             });
-            group.DELETE("/{token}/cache/skin/{username: [a-zA-z0-9_-]+}", context -> {
+            group.DELETE("/{token}/cache/skin/" + USERNAME, context -> {
                 String username = context.getParameter("username").toString();
                 service.skinRepository.invalidateSkin(username);
+                username = CloudflareUtil.urlencode(username);
                 CloudflareUtil.clearCache(
                     "/game/v1/skin/" + username + ".png",
                     "/game/v2/skin/" + username + ".png",
