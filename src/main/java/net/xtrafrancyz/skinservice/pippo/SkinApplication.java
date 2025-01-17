@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 public class SkinApplication extends Application {
     private static final Logger LOG = LoggerFactory.getLogger(SkinApplication.class);
     
-    private static final String USERNAME = "{username: [a-zA-Zа-яА-ЯІіЇїЄєЁё0-9_-]+}";
+    private static final String USERNAME = "{username: [a-zA-Zа-яА-ЯІіЇїЄєЁё0-9_.-]+}";
     
     public SkinApplication(SkinService service) {
         boolean detailed = service.config.logDetailedQueries;
